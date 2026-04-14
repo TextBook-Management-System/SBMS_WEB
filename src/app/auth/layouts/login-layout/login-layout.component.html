@@ -1,0 +1,55 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+  <app-input
+    id="email"
+    type="email"
+    label="Email"
+    placeholder="Enter your email"
+    formControlName="email"
+    [hasError]="!!emailErrors"
+    [errorMessage]="emailErrors || undefined"
+    [required]="true">
+  </app-input>
+
+  <app-input
+    id="password"
+    [type]="passwordVisible ? 'text' : 'password'"
+    label="Password"
+    placeholder="Enter your password"
+    formControlName="password"
+    [hasError]="!!passwordErrors"
+    [errorMessage]="passwordErrors || undefined"
+    [required]="true">
+    <button 
+      type="button" 
+      suffix
+      class="password-toggle"
+      (click)="togglePasswordVisibility()"
+      [attr.aria-label]="passwordVisible ? 'Hide password' : 'Show password'">
+      <span class="icon">{{ passwordVisible ? '👁️' : '👁️‍🗨️' }}</span>
+    </button>
+  </app-input>
+
+  <div class="form-group" *ngIf="showRememberMe">
+    <label class="checkbox-label">
+      <input type="checkbox" formControlName="rememberMe" />
+      <span>Remember Me</span>
+    </label>
+  </div>
+
+  <app-form-error 
+    *ngIf="authError"
+    [message]="authError || ''">
+  </app-form-error>
+
+  <app-button
+    type="submit"
+    variant="primary"
+    [disabled]="!loginForm.valid"
+    [loading]="isLoading">
+    Login
+  </app-button>
+
+  <div class="auth-links">
+    <a routerLink="/reset-password">Forgot password?</a>
+  </div>
+</form>

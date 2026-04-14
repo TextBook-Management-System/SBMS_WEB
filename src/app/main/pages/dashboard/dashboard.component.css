@@ -1,0 +1,42 @@
+@reference "tailwindcss";
+
+.dashboard-container {
+  @apply p-6 md:p-8 lg:p-10;
+}
+
+.dashboard-heading {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-white;
+}
+
+/* Mobile breakpoint (<768px) */
+@media (max-width: 767px) {
+  .dashboard-container {
+    @apply p-4;
+  }
+
+  .dashboard-heading {
+    @apply text-2xl font-bold;
+  }
+}
+
+/* Tablet breakpoint (768px-1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dashboard-container {
+    @apply p-6;
+  }
+
+  .dashboard-heading {
+    @apply text-3xl font-bold;
+  }
+}
+
+/* Desktop breakpoint (1024px+) */
+@media (min-width: 1024px) {
+  .dashboard-container {
+    @apply p-8;
+  }
+
+  .dashboard-heading {
+    @apply text-4xl font-bold;
+  }
+}

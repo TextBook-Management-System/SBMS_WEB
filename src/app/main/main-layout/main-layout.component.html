@@ -1,0 +1,25 @@
+<div class="main-layout">
+  <header class="main-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <img src="/assets/logo.svg" alt="Application Logo" class="logo" />
+      </div>
+      <nav class="main-nav">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+        <a routerLink="/home" routerLinkActive="active" class="nav-link">Home</a>
+      </nav>
+      <div class="user-menu">
+        <span class="user-name" *ngIf="currentUser">{{ currentUser.name }}</span>
+        <button class="logout-btn" (click)="logout()" aria-label="Logout">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="main-footer">
+    <p>&copy; 2026 Your Company. All rights reserved.</p>
+  </footer>
+</div>

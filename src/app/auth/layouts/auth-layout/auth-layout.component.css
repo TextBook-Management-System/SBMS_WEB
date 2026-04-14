@@ -1,0 +1,45 @@
+@reference "tailwindcss";
+
+.auth-container {
+  @apply min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 px-4 py-8;
+}
+
+.auth-card {
+  @apply w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden;
+}
+
+.auth-header {
+  @apply flex flex-col items-center justify-center px-6 py-8 bg-linear-to-r from-blue-600 to-indigo-600;
+}
+
+.logo {
+  @apply h-12 w-12 mb-4;
+}
+
+.auth-header h1 {
+  @apply text-2xl font-bold text-white text-center;
+}
+
+.auth-content {
+  @apply px-6 py-8;
+}
+
+.auth-footer {
+  @apply px-6 py-4 bg-gray-50 border-t border-gray-200 text-center;
+}
+
+.auth-footer p {
+  @apply text-sm text-gray-600;
+}
+
+/* Mobile breakpoint (<768px) */
+@media (max-width: 767px) {
+  .auth-container { @apply px-4 py-4; }
+  .auth-card { @apply max-w-sm; }
+  .auth-header { @apply px-4 py-6; }
+  .logo { @apply h-10 w-10 mb-3; }
+  .auth-header h1 { @apply text-xl; }
+  .auth-content { @apply px-4 py-6; }
+  .auth-footer { @apply px-4 py-3; }
+  .auth-footer p { @apply text-xs; }
+}

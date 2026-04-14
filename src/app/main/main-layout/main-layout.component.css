@@ -1,0 +1,28 @@
+@reference "tailwindcss";
+
+.main-layout { @apply flex flex-col min-h-screen bg-gray-50; }
+.main-header { @apply bg-white shadow-sm border-b border-gray-200; }
+.header-content { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between; }
+.logo-section { @apply shrink-0; }
+.logo { @apply h-8 w-auto; }
+.main-nav { @apply hidden md:flex items-center space-x-8 flex-1 ml-8; }
+.nav-link { @apply text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors; min-height: 44px; display: flex; align-items: center; }
+.nav-link.active { @apply text-blue-600 border-b-2 border-blue-600; }
+.user-menu { @apply flex items-center space-x-4; }
+.user-name { @apply text-sm font-medium text-gray-700 hidden sm:inline; }
+.logout-btn { @apply px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2; min-height: 44px; }
+.main-content { @apply flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8; }
+.main-footer { @apply bg-white border-t border-gray-200 py-6 px-4 sm:px-6 lg:px-8; }
+.main-footer p { @apply text-center text-sm text-gray-600; }
+
+@media (max-width: 767px) {
+  .header-content { @apply px-4 py-3 flex flex-col space-y-3; }
+  .main-nav { @apply flex w-full justify-center space-x-4; }
+  .nav-link { @apply text-sm px-2 py-2; }
+  .user-menu { @apply w-full justify-center space-x-2; }
+  .user-name { @apply hidden; }
+  .logout-btn { @apply px-3 py-2 text-sm; }
+  .main-content { @apply px-4 py-4; }
+  .main-footer { @apply px-4 py-4; }
+  .main-footer p { @apply text-xs; }
+}

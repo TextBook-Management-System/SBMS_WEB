@@ -1,0 +1,16 @@
+@reference "tailwindcss";
+
+.login-form { @apply w-full max-w-md mx-auto; }
+.form-group { @apply mb-4; }
+.checkbox-label { @apply flex items-center gap-2 text-sm text-gray-700 cursor-pointer; min-height: 44px; }
+.checkbox-label input[type="checkbox"] { @apply w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500; }
+.password-toggle { @apply p-2 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded transition-colors; min-height: 44px; min-width: 44px; }
+.password-toggle .icon { @apply text-lg; }
+.auth-links { @apply mt-4 text-center; }
+.auth-links a { @apply text-sm text-blue-600 hover:text-blue-700 transition-colors; }
+
+@media (max-width: 767px) {
+  .login-form { @apply w-full px-4; }
+  .checkbox-label { @apply text-sm py-2; }
+  .password-toggle { @apply p-2; }
+}
