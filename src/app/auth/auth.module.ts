@@ -16,22 +16,21 @@ import { ResetPasswordLayoutComponent } from './layouts/reset-password-layout/re
 
 const authRoutes: Routes = [
   {
-    path: 'login',
+    path: '',
     component: AuthLayoutComponent,
     children: [
       {
-        path: '',
+        path: 'login',
         component: LoginLayoutComponent
-      }
-    ]
-  },
-  {
-    path: 'reset-password',
-    component: AuthLayoutComponent,
-    children: [
+      },
       {
-        path: '',
+        path: 'reset-password',
         component: ResetPasswordLayoutComponent
+      },
+      {
+        path:'',
+        redirectTo:"login",
+        pathMatch:"full"
       }
     ]
   }
