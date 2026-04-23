@@ -7,27 +7,27 @@ import { App } from './app';
 import { AuthModule } from './auth/auth.module';
 import { MainModule } from './main/main.module';
 import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
-  declarations: [
-    App
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    AuthModule,
-    MainModule
-  ],
+  declarations: [App],
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, AuthModule, MainModule,ButtonModule],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideClientHydration(withEventReplay()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+      },
+    }),
   ],
-  bootstrap: [App]
+  bootstrap: [App],
 })
-export class AppModule { }
+export class AppModule {}

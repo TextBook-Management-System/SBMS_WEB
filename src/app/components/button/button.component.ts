@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-
 @Component({
   selector: 'app-button',
   standalone: false,
@@ -21,11 +20,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     @reference "tailwindcss";
 
     .btn {
-      @apply px-4 py-2 rounded-md font-medium transition-colors duration-200 flex items-center justify-center gap-2 min-h-[44px];
+      @apply px-4 w-full py-2 rounded-md font-medium transition-colors duration-200 flex items-center justify-center gap-2 min-h-[44px];
       @apply text-sm md:text-base;
     }
 
-    .btn-primary { @apply bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed; }
+    .btn-primary { @apply bg-[#16a34a] text-white hover:bg-blue-700 disabled:bg-[#16a34a] disabled:cursor-not-allowed; }
     .btn-secondary { @apply bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed; }
     .btn-danger { @apply bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300 disabled:cursor-not-allowed; }
     .btn-loading { @apply cursor-wait; }

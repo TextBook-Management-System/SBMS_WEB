@@ -1,7 +1,7 @@
 @reference "tailwindcss";
 
 .auth-container {
-  @apply min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 px-4 py-8;
+  @apply min-h-screen flex items-center justify-center  bg-[#0F172A] px-4 py-8;
 }
 
 .auth-card {
@@ -9,7 +9,7 @@
 }
 
 .auth-header {
-  @apply flex flex-col items-center justify-center px-6 py-8 bg-linear-to-r from-blue-600 to-indigo-600;
+  @apply flex flex-col items-center justify-center px-6 py-8;
 }
 
 .logo {
@@ -17,7 +17,7 @@
 }
 
 .auth-header h1 {
-  @apply text-2xl font-bold text-white text-center;
+  @apply text-2xl font-bold text-gray-600 text-center;
 }
 
 .auth-content {
