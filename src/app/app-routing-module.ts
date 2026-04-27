@@ -7,10 +7,6 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
-    path: 'reset-password',
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-  },
-  {
     path: 'dashboard',
     loadChildren: () => import('./main/main.module').then(m => m.MainModule)
   },

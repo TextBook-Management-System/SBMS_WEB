@@ -9,7 +9,7 @@
 }
 
 .auth-header {
-  @apply flex flex-col items-center justify-center px-6 py-8;
+  @apply flex flex-col items-center justify-center px-6 pt-8 pb-2;
 }
 
 .logo {
