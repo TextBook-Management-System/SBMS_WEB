@@ -33,7 +33,7 @@ import { AuthService } from '../../services/auth.service';
       </app-button>
 
       <div class="auth-links">
-        <a routerLink="/login">Back to Login</a>
+        <a routerLink="/auth/login">Back to Login</a>
       </div>
     </form>
   `,

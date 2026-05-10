@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 })
 export class AuthLayoutComponent implements OnInit, OnDestroy {
   title = '';
+  subtitle = '';
   private readonly destroy$ = new Subject<void>();
 
   constructor(private readonly router: Router) {}
@@ -28,9 +29,11 @@ export class AuthLayoutComponent implements OnInit, OnDestroy {
   private updateTitle(): void {
     const url = this.router.url;
     if (url.includes('login')) {
-      this.title = 'Login';
+      this.title = 'Welcome back';
+      this.subtitle = 'Enter your credentials to access your account';
     } else if (url.includes('reset-password')) {
-      this.title = 'Reset Password';
+      this.title = 'Reset password';
+      this.subtitle = 'Enter your email and we\'ll send you a reset link';
     }
   }
 

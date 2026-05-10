@@ -1,13 +1,66 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-header">
-        <h1> SBMS</h1>
-        <p class="text-gray-500">School Book Magagement Sytem</p>
-      <h1>{{ title }}</h1>
+<div class="auth-wrapper">
+  <!-- Left side - Branding panel -->
+  <div class="brand-panel">
+    <div class="brand-content">
+      <div class="logo-icon">
+        <i class="pi pi-book"></i>
+      </div>
+      <h1 class="brand-title">SBMS</h1>
+      <p class="brand-subtitle">School Book Management System</p>
+      <div class="brand-description">
+        <p>Manage your school's book inventory, track conditions, and streamline distribution — all in one place.</p>
+      </div>
+      <div class="brand-features">
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <i class="pi pi-box"></i>
+          </div>
+          <div class="feature-text">
+            <span class="feature-label">Inventory Tracking</span>
+            <span class="feature-desc">Real-time stock levels</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <i class="pi pi-chart-bar"></i>
+          </div>
+          <div class="feature-text">
+            <span class="feature-label">Condition Reports</span>
+            <span class="feature-desc">Automated assessments</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <i class="pi pi-sync"></i>
+          </div>
+          <div class="feature-text">
+            <span class="feature-label">Distribution</span>
+            <span class="feature-desc">Seamless book allocation</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="auth-content">
-      <router-outlet></router-outlet>
+    <div class="brand-footer">
+      <p>&copy; 2026 SBMS. All rights reserved.</p>
     </div>
+  </div>
 
+  <!-- Right side - Form panel -->
+  <div class="form-panel">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-logo-mobile">
+          <i class="pi pi-book"></i>
+        </div>
+        <h2 class="page-title">{{ title }}</h2>
+        <p class="page-subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+      </div>
+      <div class="form-body">
+        <router-outlet></router-outlet>
+      </div>
+      <div class="form-footer">
+        <p>Secured with <i class="pi pi-lock"></i> encryption</p>
+      </div>
+    </div>
   </div>
 </div>

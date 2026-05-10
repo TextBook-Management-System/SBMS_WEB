@@ -1,3 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+@import 'primeicons/primeicons.css';
+
+@theme {
+  /* Brand colors */
+  --color-primary: #16a34a;
+  --color-primary-shade: #138f41;
+  --color-primary-tint: #2dac5c;
+
+  /* Layout colors */
+  --color-sidebar: #1f2937;
+  --color-navy: #0F172A;
+  --color-surface: #F1F5F9;
+  --color-white: #FFFFFF;
+  --color-border-light: #E2E8F0;
+  --color-text-secondary: #64748B;
+
+  /* Badge colors */
+  --color-badge-good: #DCFCE7;
+  --color-badge-fair: #FEF3C7;
+  --color-badge-damaged: #FEE2E2;
+  --color-badge-new: #DBEAFE;
+}

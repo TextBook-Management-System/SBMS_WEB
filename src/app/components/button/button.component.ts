@@ -24,7 +24,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
       @apply text-sm md:text-base;
     }
 
-    .btn-primary { @apply bg-[#16a34a] text-white hover:bg-blue-700 disabled:bg-[#16a34a] disabled:cursor-not-allowed; }
+    .btn-primary {
+      @apply text-white disabled:cursor-not-allowed;
+      background-color: var(--color-primary);
+    }
+    .btn-primary:hover:not(:disabled) { background-color: var(--color-primary-shade); }
+    .btn-primary:disabled { opacity: 0.6; }
+
     .btn-secondary { @apply bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed; }
     .btn-danger { @apply bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300 disabled:cursor-not-allowed; }
     .btn-loading { @apply cursor-wait; }
