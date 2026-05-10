@@ -1,0 +1,32 @@
+@reference "tailwindcss";
+
+.header-left { @apply flex flex-col; }
+
+.btn-secondary {
+  @apply flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 transition-colors;
+}
+
+.summary-grid { @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6; }
+.summary-card { @apply flex items-center gap-3 bg-white rounded-xl border border-gray-100 p-4 shadow-sm; }
+.summary-card i { @apply text-lg; }
+.summary-card.total i { @apply text-blue-600; }
+.summary-card.new i { @apply text-indigo-500; }
+.summary-card.good i { @apply text-green-500; }
+.summary-card.fair i { @apply text-amber-500; }
+.summary-card.damaged i { @apply text-red-500; }
+.summary-card.lost i { @apply text-gray-400; }
+.summary-info { @apply flex flex-col; }
+.summary-value { @apply text-lg font-bold text-gray-800; }
+.summary-label { @apply text-xs text-gray-500; }
+
+.count-new { @apply text-indigo-600 font-medium; }
+.count-good { @apply text-green-600 font-medium; }
+.count-fair { @apply text-amber-600 font-medium; }
+.count-damaged { @apply text-red-600 font-medium; }
+.count-lost { @apply text-gray-500 font-medium; }
+
+@media (max-width: 767px) {
+  .page-header { @apply flex-col items-start gap-3; }
+  .table-container { @apply overflow-x-auto; }
+  .data-table { @apply min-w-[600px]; }
+}

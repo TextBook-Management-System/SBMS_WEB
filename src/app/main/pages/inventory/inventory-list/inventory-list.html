@@ -1,0 +1,97 @@
+<div class="page-header">
+  <div class="header-left">
+    <h2 class="page-title">Inventory</h2>
+    <p class="page-desc">Book inventory overview by school</p>
+  </div>
+  <button class="btn-secondary" (click)="printInventory()">
+    <i class="pi pi-print"></i>
+    <span>Print Report</span>
+  </button>
+</div>
+
+<!-- Summary Cards -->
+<div class="summary-grid" *ngIf="totals">
+  <div class="summary-card total">
+    <i class="pi pi-book"></i>
+    <div class="summary-info">
+      <span class="summary-value">{{ totals.totalBooks | number }}</span>
+      <span class="summary-label">Total Books</span>
+    </div>
+  </div>
+  <div class="summary-card new">
+    <i class="pi pi-star"></i>
+    <div class="summary-info">
+      <span class="summary-value">{{ totals.newCount | number }}</span>
+      <span class="summary-label">New</span>
+    </div>
+  </div>
+  <div class="summary-card good">
+    <i class="pi pi-check-circle"></i>
+    <div class="summary-info">
+      <span class="summary-value">{{ totals.goodCount | number }}</span>
+      <span class="summary-label">Good</span>
+    </div>
+  </div>
+  <div class="summary-card fair">
+    <i class="pi pi-info-circle"></i>
+    <div class="summary-info">
+      <span class="summary-value">{{ totals.fairCount | number }}</span>
+      <span class="summary-label">Fair</span>
+    </div>
+  </div>
+  <div class="summary-card damaged">
+    <i class="pi pi-exclamation-triangle"></i>
+    <div class="summary-info">
+      <span class="summary-value">{{ totals.damagedCount | number }}</span>
+      <span class="summary-label">Damaged</span>
+    </div>
+  </div>
+  <div class="summary-card lost">
+    <i class="pi pi-ban"></i>
+    <div class="summary-info">
+      <span class="summary-value">{{ totals.lostCount | number }}</span>
+      <span class="summary-label">Lost</span>
+    </div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>School</th>
+        <th>Total Books</th>
+        <th>New</th>
+        <th>Good</th>
+        <th>Fair</th>
+        <th>Damaged</th>
+        <th>Lost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of paginatedInventory">
+        <td class="cell-name">{{ item.schoolName }}</td>
+        <td><strong>{{ item.totalBooks | number }}</strong></td>
+        <td><span class="count-new">{{ item.newCount }}</span></td>
+        <td><span class="count-good">{{ item.goodCount }}</span></td>
+        <td><span class="count-fair">{{ item.fairCount }}</span></td>
+        <td><span class="count-damaged">{{ item.damagedCount }}</span></td>
+        <td><span class="count-lost">{{ item.lostCount }}</span></td>
+      </tr>
+      <tr *ngIf="inventory.length === 0 && !isLoading">
+        <td colspan="7" class="empty-state">
+          <i class="pi pi-box"></i>
+          <p>No inventory data</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-paginator
+  [totalItems]="inventory.length"
+  [pageSize]="pageSize"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-paginator>

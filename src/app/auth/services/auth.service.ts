@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
@@ -12,6 +13,7 @@ import { AuthResponse } from '../models/auth-response.model';
 export class AuthService {
   private readonly API_URL = '/api/auth';
   private readonly TOKEN_KEY = 'auth_token';
+  private readonly isBrowser: boolean;
   
   private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
   private readonly isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
@@ -19,7 +21,8 @@ export class AuthService {
   public readonly currentUser$ = this.currentUserSubject.asObservable();
   public readonly isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient, @Inject(PLATFORM_ID) platformId: Object) {
+    this.isBrowser = isPlatformBrowser(platformId);
     this.initializeAuth();
   }
 
@@ -37,6 +40,7 @@ export class AuthService {
   }
 
   private storeToken(token: string, rememberMe: boolean): void {
+    if (!this.isBrowser) return;
     if (rememberMe) {
       localStorage.setItem(this.TOKEN_KEY, token);
     } else {
@@ -49,10 +53,12 @@ export class AuthService {
   }
 
   getToken(): string | null {
+    if (!this.isBrowser) return null;
     return localStorage.getItem(this.TOKEN_KEY) || sessionStorage.getItem(this.TOKEN_KEY);
   }
 
   clearToken(): void {
+    if (!this.isBrowser) return;
     localStorage.removeItem(this.TOKEN_KEY);
     sessionStorage.removeItem(this.TOKEN_KEY);
   }

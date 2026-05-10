@@ -7,12 +7,17 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
-    path: '',
+    path: 'app',
     loadChildren: () => import('./main/main.module').then(m => m.MainModule)
   },
   {
+    path: '',
+    redirectTo: '/app/dashboard',
+    pathMatch: 'full'
+  },
+  {
     path: '**',
-    redirectTo: '/auth'
+    redirectTo: '/auth/login'
   }
 ];
 

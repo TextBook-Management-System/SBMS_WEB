@@ -1,0 +1,65 @@
+<div class="form-page">
+  <div class="form-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <h2 class="form-title">Assign Teacher to Subjects</h2>
+  </div>
+
+  <div class="form-card">
+    <div class="form-grid">
+      <div class="form-field full">
+        <label>Select Teacher *</label>
+        <select [(ngModel)]="selectedTeacherId" (change)="onTeacherSelect()">
+          <option value="">Choose a teacher</option>
+          <option *ngFor="let teacher of teachers" [value]="teacher.id">{{ teacher.firstName }} {{ teacher.lastName }} ({{ teacher.staffNumber }})</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Current Assignments -->
+    <div class="assignments-section" *ngIf="selectedTeacher">
+      <h3 class="section-title">Current Assignments</h3>
+      <div class="assignments-list" *ngIf="assignments.length > 0">
+        <div class="assignment-item" *ngFor="let assignment of assignments; let i = index">
+          <span class="assignment-text">{{ assignment.subjectId }} - {{ assignment.gradeId }}</span>
+          <button class="remove-btn" (click)="removeAssignment(i)">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
+      </div>
+      <p class="empty-text" *ngIf="assignments.length === 0">No assignments yet</p>
+
+      <!-- Add New Assignment -->
+      <h3 class="section-title">Add Assignment</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Subject</label>
+          <select [(ngModel)]="newSubjectId">
+            <option value="">Select subject</option>
+            <option *ngFor="let subject of subjects" [value]="subject">{{ subject }}</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Grade</label>
+          <select [(ngModel)]="newGradeId">
+            <option value="">Select grade</option>
+            <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-add-assignment" (click)="addAssignment()" [disabled]="!newGradeId || !newSubjectId">
+        <i class="pi pi-plus"></i> Add Assignment
+      </button>
+    </div>
+
+    <div class="form-actions" *ngIf="selectedTeacher">
+      <button type="button" class="btn-cancel" (click)="goBack()">Cancel</button>
+      <button class="btn-submit" [disabled]="isLoading" (click)="saveAssignments()">
+        <i class="pi pi-check" *ngIf="!isLoading"></i>
+        <i class="pi pi-spin pi-spinner" *ngIf="isLoading"></i>
+        Save Assignments
+      </button>
+    </div>
+  </div>
+</div>

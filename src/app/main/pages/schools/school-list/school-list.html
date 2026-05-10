@@ -1,0 +1,74 @@
+<div class="page-header">
+  <div class="header-left">
+    <h2 class="page-title">Schools</h2>
+    <p class="page-desc">Manage all schools in the district</p>
+  </div>
+  <button class="btn-add" (click)="addSchool()">
+    <i class="pi pi-plus"></i>
+    <span>Add School</span>
+  </button>
+</div>
+
+<!-- Search -->
+<div class="search-bar">
+  <i class="pi pi-search search-icon"></i>
+  <input
+    type="text"
+    placeholder="Search by name, code, or district..."
+    [value]="searchTerm"
+    (input)="onSearch($any($event.target).value)"
+    class="search-input"
+  />
+</div>
+
+<!-- Table -->
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>School Name</th>
+        <th>Code</th>
+        <th>District</th>
+        <th>Principal</th>
+        <th>Learners</th>
+        <th>Books</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let school of paginatedSchools">
+        <td class="cell-name">{{ school.name }}</td>
+        <td><span class="badge-code">{{ school.code }}</span></td>
+        <td>{{ school.district }}</td>
+        <td>{{ school.principalName }}</td>
+        <td>{{ school.totalLearners | number }}</td>
+        <td>{{ school.totalBooks | number }}</td>
+        <td class="cell-actions">
+          <button class="action-btn view" (click)="viewSchool(school.id)" title="View">
+            <i class="pi pi-eye"></i>
+          </button>
+          <button class="action-btn edit" (click)="editSchool(school.id)" title="Edit">
+            <i class="pi pi-pencil"></i>
+          </button>
+          <button class="action-btn delete" (click)="deleteSchool(school.id)" title="Delete">
+            <i class="pi pi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredSchools.length === 0 && !isLoading">
+        <td colspan="7" class="empty-state">
+          <i class="pi pi-building"></i>
+          <p>No schools found</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<app-paginator
+  [totalItems]="filteredSchools.length"
+  [pageSize]="pageSize"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-paginator>

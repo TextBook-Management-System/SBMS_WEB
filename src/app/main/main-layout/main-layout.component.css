@@ -1,28 +1,159 @@
 @reference "tailwindcss";
 
-.main-layout { @apply flex flex-col min-h-screen bg-gray-50; }
-.main-header { @apply bg-white shadow-sm border-b border-gray-200; }
-.header-content { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between; }
-.logo-section { @apply shrink-0; }
-.logo { @apply h-8 w-auto; }
-.main-nav { @apply hidden md:flex items-center space-x-8 flex-1 ml-8; }
-.nav-link { @apply text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors; min-height: 44px; display: flex; align-items: center; }
-.nav-link.active { @apply text-blue-600 border-b-2 border-blue-600; }
-.user-menu { @apply flex items-center space-x-4; }
-.user-name { @apply text-sm font-medium text-gray-700 hidden sm:inline; }
-.logout-btn { @apply px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2; min-height: 44px; }
-.main-content { @apply flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8; }
-.main-footer { @apply bg-white border-t border-gray-200 py-6 px-4 sm:px-6 lg:px-8; }
-.main-footer p { @apply text-center text-sm text-gray-600; }
+.app-layout {
+  @apply flex min-h-screen;
+  background-color: var(--color-surface, #F1F5F9);
+}
 
+.main-area {
+  @apply flex flex-col flex-1 transition-all duration-300;
+  margin-left: 260px;
+}
+
+.main-area.sidebar-collapsed {
+  margin-left: 72px;
+}
+
+/* Top bar */
+.top-bar {
+  @apply flex items-center justify-between px-6 py-3 bg-white border-b sticky top-0 z-30;
+  border-color: var(--color-border-light);
+  min-height: 64px;
+}
+
+.top-bar-left {
+  @apply flex items-center gap-4;
+}
+
+.mobile-menu-btn {
+  @apply hidden w-10 h-10 rounded-lg items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors;
+}
+
+.page-meta {
+  @apply flex items-center;
+}
+
+.page-heading-row {
+  @apply flex items-center gap-3;
+}
+
+.page-icon-badge {
+  @apply w-9 h-9 rounded-lg flex items-center justify-center;
+  background-color: rgba(22, 163, 74, 0.1);
+}
+
+.page-icon-badge i {
+  @apply text-sm;
+  color: var(--color-primary);
+}
+
+.page-text {
+  @apply flex flex-col;
+}
+
+.page-heading {
+  @apply text-base font-semibold leading-tight;
+  color: var(--color-navy);
+}
+
+.page-description {
+  @apply text-xs text-gray-400 mt-0.5;
+}
+
+.top-bar-right {
+  @apply flex items-center gap-2;
+}
+
+.header-action-btn {
+  @apply relative w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors;
+}
+
+.header-action-btn i {
+  @apply text-sm;
+}
+
+.notification-dot {
+  @apply absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500;
+}
+
+.divider-v {
+  @apply w-px h-8 bg-gray-200 mx-1;
+}
+
+.user-pill {
+  @apply flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer;
+}
+
+.user-pill-avatar {
+  @apply w-8 h-8 rounded-full flex items-center justify-center;
+  background: linear-gradient(135deg, var(--color-primary-tint), var(--color-primary));
+}
+
+.user-pill-avatar i {
+  @apply text-white text-xs;
+}
+
+.user-pill-info {
+  @apply flex flex-col;
+}
+
+.user-pill-name {
+  @apply text-sm font-medium leading-tight;
+  color: var(--color-navy);
+}
+
+.user-pill-role {
+  @apply text-xs text-gray-400;
+}
+
+.user-pill-chevron {
+  @apply text-xs text-gray-400 ml-1;
+}
+
+/* Page content */
+.page-content {
+  @apply flex-1 p-6;
+}
+
+/* Mobile */
 @media (max-width: 767px) {
-  .header-content { @apply px-4 py-3 flex flex-col space-y-3; }
-  .main-nav { @apply flex w-full justify-center space-x-4; }
-  .nav-link { @apply text-sm px-2 py-2; }
-  .user-menu { @apply w-full justify-center space-x-2; }
-  .user-name { @apply hidden; }
-  .logout-btn { @apply px-3 py-2 text-sm; }
-  .main-content { @apply px-4 py-4; }
-  .main-footer { @apply px-4 py-4; }
-  .main-footer p { @apply text-xs; }
+  .main-area {
+    margin-left: 0;
+  }
+
+  .main-area.sidebar-collapsed {
+    margin-left: 0;
+  }
+
+  .mobile-menu-btn {
+    @apply flex;
+  }
+
+  .top-bar {
+    @apply px-4 py-3;
+  }
+
+  .page-description {
+    @apply hidden;
+  }
+
+  .page-icon-badge {
+    @apply hidden;
+  }
+
+  .page-content {
+    @apply p-4;
+  }
+
+  .user-pill-info {
+    @apply hidden;
+  }
+
+  .user-pill-chevron {
+    @apply hidden;
+  }
+
+  .divider-v {
+    @apply hidden;
+  }
 }

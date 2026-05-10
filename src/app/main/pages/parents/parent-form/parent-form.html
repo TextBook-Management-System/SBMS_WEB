@@ -1,0 +1,50 @@
+<div class="form-page">
+  <div class="form-header">
+    <button class="back-btn" (click)="cancel()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <h2 class="form-title">{{ isEdit ? 'Edit Parent' : 'Register New Parent' }}</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>First Name *</label>
+        <input formControlName="firstName" placeholder="Enter first name" />
+      </div>
+      <div class="form-field">
+        <label>Last Name *</label>
+        <input formControlName="lastName" placeholder="Enter last name" />
+      </div>
+      <div class="form-field">
+        <label>Email *</label>
+        <input formControlName="email" type="email" placeholder="parent@example.com" />
+      </div>
+      <div class="form-field">
+        <label>Phone *</label>
+        <input formControlName="phone" placeholder="e.g. 082-555-0101" />
+      </div>
+      <div class="form-field">
+        <label>ID Number *</label>
+        <input formControlName="idNumber" placeholder="Enter ID number" />
+      </div>
+      <div class="form-field" *ngIf="!isEdit">
+        <label>Password *</label>
+        <input formControlName="password" type="password" placeholder="Min 6 characters" />
+      </div>
+      <div class="form-field full">
+        <label>Address *</label>
+        <input formControlName="address" placeholder="Enter full address" />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn-submit" [disabled]="!form.valid || isLoading">
+        <i class="pi pi-check" *ngIf="!isLoading"></i>
+        <i class="pi pi-spin pi-spinner" *ngIf="isLoading"></i>
+        {{ isEdit ? 'Update' : 'Register' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,15 @@
+@reference "tailwindcss";
+
+.header-left { @apply flex flex-col; }
+.header-actions { @apply flex items-center gap-2; }
+
+.btn-secondary {
+  @apply flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 transition-colors;
+}
+
+@media (max-width: 767px) {
+  .page-header { @apply flex-col items-start gap-3; }
+  .btn-add { @apply w-full justify-center; }
+  .table-container { @apply overflow-x-auto; }
+  .data-table { @apply min-w-[600px]; }
+}

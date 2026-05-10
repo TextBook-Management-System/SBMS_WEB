@@ -1,3 +1,270 @@
-<div class="dashboard-container">
-  <h1 class="dashboard-heading">Dashboard</h1>
+<!-- Welcome banner -->
+<div class="welcome-banner">
+  <div class="welcome-text">
+    <h2>Welcome back, Admin</h2>
+    <p>Here's what's happening across your district today.</p>
+  </div>
+  <div class="welcome-date">
+    <i class="pi pi-calendar"></i>
+    <span>{{ today | date:'fullDate' }}</span>
+  </div>
+</div>
+
+<!-- Stats row -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon-box schools">
+      <i class="pi pi-building"></i>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">24</span>
+      <span class="stat-label">Schools</span>
+    </div>
+    <div class="stat-trend up">
+      <i class="pi pi-arrow-up"></i> 2 new
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon-box books">
+      <i class="pi pi-book"></i>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">12,450</span>
+      <span class="stat-label">Total Books</span>
+    </div>
+    <div class="stat-trend up">
+      <i class="pi pi-arrow-up"></i> +340
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon-box learners">
+      <i class="pi pi-users"></i>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">8,320</span>
+      <span class="stat-label">Learners</span>
+    </div>
+    <div class="stat-trend up">
+      <i class="pi pi-arrow-up"></i> +125
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon-box requests">
+      <i class="pi pi-inbox"></i>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">5</span>
+      <span class="stat-label">Pending Requests</span>
+    </div>
+    <div class="stat-trend down">
+      <i class="pi pi-arrow-down"></i> -3
+    </div>
+  </div>
+</div>
+
+<!-- Middle row: Book condition + Recent activity -->
+<div class="middle-grid">
+  <!-- Book condition breakdown -->
+  <div class="card condition-card">
+    <div class="card-header">
+      <h3>Book Condition Overview</h3>
+      <span class="card-badge">District-wide</span>
+    </div>
+    <div class="condition-bars">
+      <div class="condition-row">
+        <div class="condition-label">
+          <span class="condition-dot new"></span>
+          <span>New</span>
+        </div>
+        <div class="condition-bar-track">
+          <div class="condition-bar-fill new" style="width: 28%"></div>
+        </div>
+        <span class="condition-count">3,486</span>
+      </div>
+      <div class="condition-row">
+        <div class="condition-label">
+          <span class="condition-dot good"></span>
+          <span>Good</span>
+        </div>
+        <div class="condition-bar-track">
+          <div class="condition-bar-fill good" style="width: 42%"></div>
+        </div>
+        <span class="condition-count">5,229</span>
+      </div>
+      <div class="condition-row">
+        <div class="condition-label">
+          <span class="condition-dot fair"></span>
+          <span>Fair</span>
+        </div>
+        <div class="condition-bar-track">
+          <div class="condition-bar-fill fair" style="width: 18%"></div>
+        </div>
+        <span class="condition-count">2,241</span>
+      </div>
+      <div class="condition-row">
+        <div class="condition-label">
+          <span class="condition-dot damaged"></span>
+          <span>Damaged</span>
+        </div>
+        <div class="condition-bar-track">
+          <div class="condition-bar-fill damaged" style="width: 9%"></div>
+        </div>
+        <span class="condition-count">1,120</span>
+      </div>
+      <div class="condition-row">
+        <div class="condition-label">
+          <span class="condition-dot lost"></span>
+          <span>Lost</span>
+        </div>
+        <div class="condition-bar-track">
+          <div class="condition-bar-fill lost" style="width: 3%"></div>
+        </div>
+        <span class="condition-count">374</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent activity -->
+  <div class="card activity-card">
+    <div class="card-header">
+      <h3>Recent Activity</h3>
+      <a class="card-link" routerLink="/app/book-requests">View all</a>
+    </div>
+    <div class="activity-list">
+      <div class="activity-item">
+        <div class="activity-icon approved">
+          <i class="pi pi-check"></i>
+        </div>
+        <div class="activity-content">
+          <p class="activity-text"><strong>Greenfield Primary</strong> request approved</p>
+          <span class="activity-time">2 hours ago</span>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-icon pending">
+          <i class="pi pi-clock"></i>
+        </div>
+        <div class="activity-content">
+          <p class="activity-text"><strong>Sunrise Secondary</strong> submitted new request</p>
+          <span class="activity-time">4 hours ago</span>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-icon transfer">
+          <i class="pi pi-sync"></i>
+        </div>
+        <div class="activity-content">
+          <p class="activity-text">Transfer completed: Riverside → Valley View (45 books)</p>
+          <span class="activity-time">Yesterday</span>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-icon new-entry">
+          <i class="pi pi-user-plus"></i>
+        </div>
+        <div class="activity-content">
+          <p class="activity-text"><strong>12 learners</strong> registered at Hillcrest Combined</p>
+          <span class="activity-time">Yesterday</span>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-icon rejected">
+          <i class="pi pi-times"></i>
+        </div>
+        <div class="activity-content">
+          <p class="activity-text"><strong>Northgate Primary</strong> request rejected</p>
+          <span class="activity-time">2 days ago</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom row: Top schools + Quick actions -->
+<div class="bottom-grid">
+  <!-- Top schools by book ratio -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Schools Needing Attention</h3>
+      <span class="card-badge warning">Low stock</span>
+    </div>
+    <div class="school-ranking">
+      <div class="rank-item deficit">
+        <div class="rank-info">
+          <span class="rank-name">Hillcrest Combined</span>
+          <span class="rank-detail">520 learners · 900 books</span>
+        </div>
+        <div class="rank-ratio">
+          <span class="ratio-value">1.7</span>
+          <span class="ratio-label">books/learner</span>
+        </div>
+      </div>
+      <div class="rank-item deficit">
+        <div class="rank-info">
+          <span class="rank-name">Kingsway Primary</span>
+          <span class="rank-detail">340 learners · 870 books</span>
+        </div>
+        <div class="rank-ratio">
+          <span class="ratio-value">2.6</span>
+          <span class="ratio-label">books/learner</span>
+        </div>
+      </div>
+      <div class="rank-item deficit">
+        <div class="rank-info">
+          <span class="rank-name">Sunnydale Primary</span>
+          <span class="rank-detail">360 learners · 920 books</span>
+        </div>
+        <div class="rank-ratio">
+          <span class="ratio-value">2.6</span>
+          <span class="ratio-label">books/learner</span>
+        </div>
+      </div>
+      <div class="rank-item surplus">
+        <div class="rank-info">
+          <span class="rank-name">Crescent Park High</span>
+          <span class="rank-detail">810 learners · 2,400 books</span>
+        </div>
+        <div class="rank-ratio">
+          <span class="ratio-value good">3.0</span>
+          <span class="ratio-label">books/learner</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick actions -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Quick Actions</h3>
+    </div>
+    <div class="quick-actions">
+      <a class="quick-action-btn" routerLink="/app/book-requests/new">
+        <div class="qa-icon requests"><i class="pi pi-plus-circle"></i></div>
+        <span>New Book Request</span>
+      </a>
+      <a class="quick-action-btn" routerLink="/app/learners/new">
+        <div class="qa-icon learners"><i class="pi pi-user-plus"></i></div>
+        <span>Register Learner</span>
+      </a>
+      <a class="quick-action-btn" routerLink="/app/ai-suggestions">
+        <div class="qa-icon ai"><i class="pi pi-sparkles"></i></div>
+        <span>AI Suggestions</span>
+      </a>
+      <a class="quick-action-btn" routerLink="/app/reports">
+        <div class="qa-icon reports"><i class="pi pi-chart-bar"></i></div>
+        <span>Generate Report</span>
+      </a>
+      <a class="quick-action-btn" routerLink="/app/inventory/print">
+        <div class="qa-icon inventory"><i class="pi pi-print"></i></div>
+        <span>Print Inventory</span>
+      </a>
+      <a class="quick-action-btn" routerLink="/app/schools/new">
+        <div class="qa-icon schools"><i class="pi pi-building"></i></div>
+        <span>Add School</span>
+      </a>
+    </div>
+  </div>
 </div>

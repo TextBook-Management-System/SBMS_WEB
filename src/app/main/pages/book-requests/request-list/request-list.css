@@ -1,0 +1,13 @@
+@reference "tailwindcss";
+
+.header-left { @apply flex flex-col; }
+
+.action-btn.reject { @apply text-red-500; }
+.action-btn.reject:hover { @apply bg-red-50; }
+
+@media (max-width: 767px) {
+  .page-header { @apply flex-col items-start gap-3; }
+  .btn-add { @apply w-full justify-center; }
+  .table-container { @apply overflow-x-auto; }
+  .data-table { @apply min-w-[600px]; }
+}

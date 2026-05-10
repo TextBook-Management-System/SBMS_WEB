@@ -1,0 +1,47 @@
+@reference "tailwindcss";
+
+.detail-page { @apply max-w-4xl; }
+.detail-header { @apply flex items-center gap-3 mb-6; }
+.back-btn { @apply w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors; }
+.header-info { @apply flex-1 flex items-center gap-3; }
+.detail-title { @apply text-xl font-bold text-gray-800; }
+
+.badge-status { @apply px-2 py-0.5 rounded text-xs font-medium capitalize; }
+.status-pending { @apply bg-amber-50 text-amber-700; }
+.status-approved { @apply bg-green-50 text-green-700; }
+.status-rejected { @apply bg-red-50 text-red-700; }
+.status-fulfilled { @apply bg-blue-50 text-blue-700; }
+
+.header-actions { @apply flex items-center gap-2; }
+.btn-approve { @apply flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors; }
+.btn-reject { @apply flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors; }
+
+.detail-grid { @apply grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6; }
+.stat-card { @apply flex items-center gap-3 bg-white rounded-xl border border-gray-100 p-4 shadow-sm; }
+.stat-icon { @apply text-xl; }
+.stat-icon.school { @apply text-purple-500; }
+.stat-icon.subject { @apply text-green-500; }
+.stat-icon.quantity { @apply text-blue-500; }
+.stat-info { @apply flex flex-col; }
+.stat-value { @apply text-lg font-bold text-gray-800; }
+.stat-label { @apply text-xs text-gray-500; }
+
+.info-card { @apply bg-white rounded-xl border border-gray-100 p-6 shadow-sm mb-6; }
+.card-title { @apply text-base font-semibold text-gray-800 mb-4 pb-3 border-b border-gray-100; }
+.info-grid { @apply grid grid-cols-1 sm:grid-cols-2 gap-4; }
+.info-item { @apply flex flex-col gap-0.5; }
+.info-item.full { @apply sm:col-span-2; }
+.info-label { @apply text-xs font-medium text-gray-500 uppercase tracking-wider; }
+.info-value { @apply text-sm text-gray-800; }
+
+.timeline { @apply flex flex-col gap-0; }
+.timeline-item { @apply flex items-start gap-3 pb-6 relative; }
+.timeline-item:last-child { @apply pb-0; }
+.timeline-item::before { content: ''; @apply absolute left-[7px] top-5 w-0.5 h-full bg-gray-200; }
+.timeline-item:last-child::before { @apply hidden; }
+.timeline-item.active::before { @apply bg-green-300; }
+.timeline-dot { @apply w-4 h-4 rounded-full border-2 border-gray-300 bg-white flex-shrink-0 mt-0.5; }
+.timeline-item.active .timeline-dot { @apply border-green-500 bg-green-500; }
+.timeline-content { @apply flex flex-col; }
+.timeline-title { @apply text-sm font-medium text-gray-700; }
+.timeline-date { @apply text-xs text-gray-500; }

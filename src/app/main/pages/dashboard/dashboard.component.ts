@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,4 +6,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  today = new Date();
+}

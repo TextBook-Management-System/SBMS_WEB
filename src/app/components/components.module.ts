@@ -4,13 +4,15 @@ import { ButtonComponent } from './button/button.component';
 import { InputComponent } from './input/input.component';
 import { FormErrorComponent } from './form-error/form-error.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import { PaginatorComponent } from './paginator/paginator.component';
 
 @NgModule({
   declarations: [
     ButtonComponent,
     InputComponent,
     FormErrorComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    PaginatorComponent
   ],
   imports: [
     CommonModule
@@ -19,7 +21,8 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
     ButtonComponent,
     InputComponent,
     FormErrorComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    PaginatorComponent
   ]
 })
 export class ComponentsModule { }

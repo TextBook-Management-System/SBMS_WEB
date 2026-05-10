@@ -1,0 +1,36 @@
+<div class="form-page">
+  <div class="form-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <h2 class="form-title">Assign Book to Learner</h2>
+  </div>
+
+  <div class="form-card">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Select Book *</label>
+        <select [(ngModel)]="selectedBookId">
+          <option value="">Choose a book</option>
+          <option *ngFor="let book of availableBooks" [value]="book.id">{{ book.title }} ({{ book.isbn }})</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Select Learner *</label>
+        <select [(ngModel)]="selectedLearnerId">
+          <option value="">Choose a learner</option>
+          <option *ngFor="let learner of learners" [value]="learner.id">{{ learner.firstName }} {{ learner.lastName }} ({{ learner.gradeId }})</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="goBack()">Cancel</button>
+      <button class="btn-submit" [disabled]="!selectedBookId || !selectedLearnerId || isLoading" (click)="assignBook()">
+        <i class="pi pi-link" *ngIf="!isLoading"></i>
+        <i class="pi pi-spin pi-spinner" *ngIf="isLoading"></i>
+        Assign Book
+      </button>
+    </div>
+  </div>
+</div>

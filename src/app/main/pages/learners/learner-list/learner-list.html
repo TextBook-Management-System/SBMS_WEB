@@ -1,0 +1,86 @@
+<div class="page-header">
+  <div class="header-left">
+    <h2 class="page-title"><i class="pi pi-users title-icon"></i> Learners</h2>
+    <p class="page-desc">Manage learner records and grade assignments</p>
+  </div>
+  <button class="btn-add" (click)="addLearner()">
+    <i class="pi pi-plus"></i>
+    <span>Add Learner</span>
+  </button>
+</div>
+
+<!-- Filters row -->
+<div class="filters-row">
+  <div class="search-bar">
+    <i class="pi pi-search search-icon"></i>
+    <input
+      type="text"
+      placeholder="Search by name, ID number..."
+      [value]="searchTerm"
+      (input)="onSearch($any($event.target).value)"
+      class="search-input"
+    />
+  </div>
+  <div class="filter-group">
+    <label class="filter-label"><i class="pi pi-filter"></i> Grade</label>
+    <select class="filter-select" (change)="onGradeFilter($any($event.target).value)" [value]="selectedGrade">
+      <option value="">All Grades</option>
+      <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+    </select>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>ID Number</th>
+        <th>Grade</th>
+        <th>Gender</th>
+        <th>Parent</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let learner of paginatedLearners">
+        <td class="cell-name">
+          <i class="pi pi-user cell-icon"></i>
+          {{ learner.firstName }} {{ learner.lastName }}
+        </td>
+        <td><span class="badge-code">{{ learner.idNumber }}</span></td>
+        <td><span class="badge-grade">{{ learner.gradeId }}</span></td>
+        <td class="capitalize">{{ learner.gender }}</td>
+        <td>
+          <span *ngIf="learner.parentId" class="linked"><i class="pi pi-link"></i> Linked</span>
+          <span *ngIf="!learner.parentId" class="not-linked">Not linked</span>
+        </td>
+        <td class="cell-actions">
+          <button class="action-btn view" (click)="viewLearner(learner.id)" title="View">
+            <i class="pi pi-eye"></i>
+          </button>
+          <button class="action-btn edit" (click)="editLearner(learner.id)" title="Edit">
+            <i class="pi pi-pencil"></i>
+          </button>
+          <button class="action-btn delete" (click)="deleteLearner(learner.id)" title="Delete">
+            <i class="pi pi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredLearners.length === 0 && !isLoading">
+        <td colspan="6" class="empty-state">
+          <i class="pi pi-users"></i>
+          <p>No learners found</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-paginator
+  [totalItems]="filteredLearners.length"
+  [pageSize]="pageSize"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-paginator>

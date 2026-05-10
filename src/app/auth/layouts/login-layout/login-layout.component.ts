@@ -75,7 +75,7 @@ export class LoginLayoutComponent implements OnInit, OnDestroy {
 
   private handleLoginSuccess(): void {
     this.isLoading = false;
-    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/app/dashboard';
     this.router.navigate([returnUrl]);
   }
 

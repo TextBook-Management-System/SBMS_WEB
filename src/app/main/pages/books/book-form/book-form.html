@@ -1,0 +1,59 @@
+<div class="form-page">
+  <div class="form-header">
+    <button class="back-btn" (click)="cancel()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <h2 class="form-title">{{ isEdit ? 'Edit Book' : 'Add New Book' }}</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+    <div class="form-grid">
+      <div class="form-field full">
+        <label>Title *</label>
+        <input formControlName="title" placeholder="Enter book title" />
+      </div>
+      <div class="form-field">
+        <label>ISBN *</label>
+        <input formControlName="isbn" placeholder="e.g. 978-0-123456-01" />
+      </div>
+      <div class="form-field">
+        <label>Author *</label>
+        <input formControlName="author" placeholder="Enter author name" />
+      </div>
+      <div class="form-field">
+        <label>Publisher *</label>
+        <input formControlName="publisher" placeholder="Enter publisher" />
+      </div>
+      <div class="form-field">
+        <label>Subject *</label>
+        <select formControlName="subjectId">
+          <option value="">Select a subject</option>
+          <option *ngFor="let subject of subjects" [value]="subject">{{ subject }}</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Grade *</label>
+        <select formControlName="gradeId">
+          <option value="">Select a grade</option>
+          <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Condition *</label>
+        <select formControlName="condition">
+          <option value="">Select condition</option>
+          <option *ngFor="let cond of conditions" [value]="cond">{{ cond }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn-submit" [disabled]="!form.valid || isLoading">
+        <i class="pi pi-check" *ngIf="!isLoading"></i>
+        <i class="pi pi-spin pi-spinner" *ngIf="isLoading"></i>
+        {{ isEdit ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div>

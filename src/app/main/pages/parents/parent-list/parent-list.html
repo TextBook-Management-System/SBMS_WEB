@@ -1,0 +1,71 @@
+<div class="page-header">
+  <div class="header-left">
+    <h2 class="page-title">Parents</h2>
+    <p class="page-desc">Manage parent/guardian records</p>
+  </div>
+  <button class="btn-add" (click)="addParent()">
+    <i class="pi pi-plus"></i>
+    <span>Add Parent</span>
+  </button>
+</div>
+
+<!-- Search -->
+<div class="search-bar">
+  <i class="pi pi-search search-icon"></i>
+  <input
+    type="text"
+    placeholder="Search by name, email, or ID number..."
+    [value]="searchTerm"
+    (input)="onSearch($any($event.target).value)"
+    class="search-input"
+  />
+</div>
+
+<!-- Table -->
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>ID Number</th>
+        <th>Linked Learners</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let parent of paginatedParents">
+        <td class="cell-name">{{ parent.firstName }} {{ parent.lastName }}</td>
+        <td>{{ parent.email }}</td>
+        <td>{{ parent.phone }}</td>
+        <td><span class="badge-code">{{ parent.idNumber }}</span></td>
+        <td>{{ parent.learnerIds.length }}</td>
+        <td class="cell-actions">
+          <button class="action-btn view" (click)="viewParent(parent.id)" title="View">
+            <i class="pi pi-eye"></i>
+          </button>
+          <button class="action-btn edit" (click)="editParent(parent.id)" title="Edit">
+            <i class="pi pi-pencil"></i>
+          </button>
+          <button class="action-btn delete" (click)="deleteParent(parent.id)" title="Delete">
+            <i class="pi pi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredParents.length === 0 && !isLoading">
+        <td colspan="6" class="empty-state">
+          <i class="pi pi-users"></i>
+          <p>No parents found</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-paginator
+  [totalItems]="filteredParents.length"
+  [pageSize]="pageSize"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-paginator>

@@ -1,0 +1,82 @@
+<div class="print-page">
+  <div class="print-actions">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i> Back
+    </button>
+    <button class="btn-print" (click)="print()">
+      <i class="pi pi-print"></i> Print
+    </button>
+  </div>
+
+  <div class="print-content">
+    <div class="print-header">
+      <h1 class="print-title">Book Inventory Report</h1>
+      <p class="print-date">Generated: {{ printDate | date:'fullDate' }}</p>
+    </div>
+
+    <!-- Summary -->
+    <div class="print-summary" *ngIf="totals">
+      <div class="summary-item">
+        <span class="summary-label">Total Books</span>
+        <span class="summary-value">{{ totals.totalBooks | number }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">New</span>
+        <span class="summary-value">{{ totals.newCount | number }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Good</span>
+        <span class="summary-value">{{ totals.goodCount | number }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Fair</span>
+        <span class="summary-value">{{ totals.fairCount | number }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Damaged</span>
+        <span class="summary-value">{{ totals.damagedCount | number }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Lost</span>
+        <span class="summary-value">{{ totals.lostCount | number }}</span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <table class="print-table">
+      <thead>
+        <tr>
+          <th>School</th>
+          <th>Total</th>
+          <th>New</th>
+          <th>Good</th>
+          <th>Fair</th>
+          <th>Damaged</th>
+          <th>Lost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of inventory">
+          <td>{{ item.schoolName }}</td>
+          <td><strong>{{ item.totalBooks }}</strong></td>
+          <td>{{ item.newCount }}</td>
+          <td>{{ item.goodCount }}</td>
+          <td>{{ item.fairCount }}</td>
+          <td>{{ item.damagedCount }}</td>
+          <td>{{ item.lostCount }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="totals">
+        <tr>
+          <td><strong>TOTAL</strong></td>
+          <td><strong>{{ totals.totalBooks }}</strong></td>
+          <td><strong>{{ totals.newCount }}</strong></td>
+          <td><strong>{{ totals.goodCount }}</strong></td>
+          <td><strong>{{ totals.fairCount }}</strong></td>
+          <td><strong>{{ totals.damagedCount }}</strong></td>
+          <td><strong>{{ totals.lostCount }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

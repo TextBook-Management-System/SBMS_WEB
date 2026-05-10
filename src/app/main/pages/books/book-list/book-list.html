@@ -1,0 +1,82 @@
+<div class="page-header">
+  <div class="header-left">
+    <h2 class="page-title">Books</h2>
+    <p class="page-desc">Manage textbook inventory</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn-secondary" (click)="assignBooks()">
+      <i class="pi pi-link"></i>
+      <span>Assign</span>
+    </button>
+    <button class="btn-add" (click)="addBook()">
+      <i class="pi pi-plus"></i>
+      <span>Add Book</span>
+    </button>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="search-bar">
+  <i class="pi pi-search search-icon"></i>
+  <input
+    type="text"
+    placeholder="Search by title, ISBN, author, or subject..."
+    [value]="searchTerm"
+    (input)="onSearch($any($event.target).value)"
+    class="search-input"
+  />
+</div>
+
+<!-- Table -->
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>ISBN</th>
+        <th>Author</th>
+        <th>Subject</th>
+        <th>Grade</th>
+        <th>Condition</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of paginatedBooks">
+        <td class="cell-name">{{ book.title }}</td>
+        <td><span class="badge-code">{{ book.isbn }}</span></td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.subjectId }}</td>
+        <td>{{ book.gradeId }}</td>
+        <td>
+          <span class="badge-condition" [ngClass]="'condition-' + book.condition">{{ book.condition }}</span>
+        </td>
+        <td>
+          <span class="badge-assigned" [class.assigned]="book.isAssigned">{{ book.isAssigned ? 'Assigned' : 'Available' }}</span>
+        </td>
+        <td class="cell-actions">
+          <button class="action-btn edit" (click)="editBook(book.id)" title="Edit">
+            <i class="pi pi-pencil"></i>
+          </button>
+          <button class="action-btn delete" (click)="deleteBook(book.id)" title="Delete">
+            <i class="pi pi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredBooks.length === 0 && !isLoading">
+        <td colspan="8" class="empty-state">
+          <i class="pi pi-book"></i>
+          <p>No books found</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-paginator
+  [totalItems]="filteredBooks.length"
+  [pageSize]="pageSize"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-paginator>
