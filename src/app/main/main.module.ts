@@ -41,6 +41,7 @@ import { LearnerDetailComponent } from './pages/learners/learner-detail/learner-
 import { ParentListComponent } from './pages/parents/parent-list/parent-list';
 import { ParentFormComponent } from './pages/parents/parent-form/parent-form';
 import { ParentDetailComponent } from './pages/parents/parent-detail/parent-detail';
+import { ParentBooksComponent } from './pages/parents/parent-books/parent-books';
 
 // Pages - Teachers
 import { TeacherListComponent } from './pages/teachers/teacher-list/teacher-list';
@@ -98,6 +99,7 @@ const mainRoutes: Routes = [
       // Parents (SchoolAdmin)
       { path: 'parents', component: ParentListComponent },
       { path: 'parents/new', component: ParentFormComponent },
+      { path: 'parents/books', component: ParentBooksComponent },
       { path: 'parents/:id', component: ParentDetailComponent },
       { path: 'parents/:id/edit', component: ParentFormComponent },
 
@@ -139,6 +141,7 @@ const mainRoutes: Routes = [
     ParentListComponent,
     ParentFormComponent,
     ParentDetailComponent,
+    ParentBooksComponent,
     TeacherListComponent,
     TeacherFormComponent,
     TeacherAssignComponent,
