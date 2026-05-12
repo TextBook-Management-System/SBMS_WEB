@@ -47,10 +47,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
         this.currentUser = user?.full_name || 'User';
-        this.currentUserRole = this.formatRole(user?.roles?.[0]?.role);
-        console.log(user)
+        this.currentUserRole = this.formatRole(user?.role);
+
         // Update nav items based on actual user role
-        const role = this.mapApiRoleToUserRole(user?.roles?.[0]?.role);
+        const role = this.mapApiRoleToUserRole(user?.role);
         this.navItems = this.navigationService.getNavItemsForRole(role);
       });
   }
