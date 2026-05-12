@@ -57,6 +57,12 @@ export class NavigationService {
       roles: [UserRole.SchoolAdmin]
     },
     {
+      label: 'Children\'s Books',
+      icon: 'pi pi-book',
+      route: '/app/parents/books',
+      roles: [UserRole.Parent]
+    },
+    {
       label: 'Teachers',
       icon: 'pi pi-id-card',
       route: '/app/teachers',
