@@ -4,8 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ComponentsModule } from '../components/components.module';
-import { AuthService } from './services/auth.service';
-import { AuthGuard } from './guards/auth.guard';
 
 // Layout components
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
@@ -47,8 +45,8 @@ const authRoutes: Routes = [
     ComponentsModule
   ],
   providers: [
-    AuthService,
-    AuthGuard
+    // AuthService and AuthGuard are providedIn: 'root' — do NOT re-provide here
+    // or it creates a separate instance for this lazy-loaded module
   ]
 })
 export class AuthModule { }
