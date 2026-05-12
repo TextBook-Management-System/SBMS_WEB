@@ -1,0 +1,68 @@
+<div class="detail-page" *ngIf="school">
+  <div class="detail-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <div class="header-info">
+      <h2 class="detail-title">{{ school.name }}</h2>
+      <span class="badge-code">{{ school.code }}</span>
+    </div>
+    <button class="btn-edit" (click)="editSchool()">
+      <i class="pi pi-pencil"></i> Edit
+    </button>
+  </div>
+
+  <div class="detail-grid">
+    <div class="stat-card">
+      <i class="pi pi-users stat-icon learners"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ school.totalLearners | number }}</span>
+        <span class="stat-label">Learners</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-book stat-icon books"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ school.totalBooks | number }}</span>
+        <span class="stat-label">Books</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-chart-line stat-icon ratio"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ (school.totalBooks / school.totalLearners) | number:'1.1-1' }}</span>
+        <span class="stat-label">Books/Learner</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3 class="card-title">School Information</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Principal</span>
+        <span class="info-value">{{ school.principalName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">District</span>
+        <span class="info-value">{{ school.district }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Province</span>
+        <span class="info-value">{{ school.province }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Contact</span>
+        <span class="info-value">{{ school.contactNumber }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Email</span>
+        <span class="info-value">{{ school.email }}</span>
+      </div>
+      <div class="info-item full">
+        <span class="info-label">Address</span>
+        <span class="info-value">{{ school.address }}</span>
+      </div>
+    </div>
+  </div>
+</div>

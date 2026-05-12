@@ -1,0 +1,83 @@
+<div class="detail-page" *ngIf="learner">
+  <div class="detail-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <div class="header-info">
+      <h2 class="detail-title">{{ learner.firstName }} {{ learner.lastName }}</h2>
+      <span class="badge-code">{{ learner.gradeId }}</span>
+    </div>
+    <button class="btn-edit" (click)="editLearner()">
+      <i class="pi pi-pencil"></i> Edit
+    </button>
+  </div>
+
+  <div class="detail-grid">
+    <div class="stat-card">
+      <i class="pi pi-id-card stat-icon id"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ learner.idNumber }}</span>
+        <span class="stat-label">ID Number</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-calendar stat-icon dob"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ learner.dateOfBirth | date:'mediumDate' }}</span>
+        <span class="stat-label">Date of Birth</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-book stat-icon books"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ assignedBooks.length }}</span>
+        <span class="stat-label">Assigned Books</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3 class="card-title">Learner Information</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">First Name</span>
+        <span class="info-value">{{ learner.firstName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Last Name</span>
+        <span class="info-value">{{ learner.lastName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Gender</span>
+        <span class="info-value capitalize">{{ learner.gender }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Grade</span>
+        <span class="info-value">{{ learner.gradeId }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">School ID</span>
+        <span class="info-value">{{ learner.schoolId }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Parent ID</span>
+        <span class="info-value">{{ learner.parentId || 'Not linked' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assigned Books -->
+  <div class="info-card" *ngIf="assignedBooks.length > 0">
+    <h3 class="card-title">Assigned Books</h3>
+    <div class="books-list">
+      <div class="book-item" *ngFor="let book of assignedBooks">
+        <i class="pi pi-book"></i>
+        <div class="book-info">
+          <span class="book-title">{{ book.title }}</span>
+          <span class="book-meta">{{ book.subjectId }} · {{ book.gradeId }}</span>
+        </div>
+        <span class="badge-condition" [ngClass]="'condition-' + book.condition">{{ book.condition }}</span>
+      </div>
+    </div>
+  </div>
+</div>

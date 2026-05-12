@@ -1,0 +1,70 @@
+@reference "tailwindcss";
+
+.login-form {
+  @apply w-full;
+}
+
+.password-field {
+  @apply relative;
+}
+
+.form-options {
+  @apply flex items-center justify-between mb-6;
+}
+
+.checkbox-label {
+  @apply flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none;
+  min-height: 44px;
+}
+
+.checkbox-label input[type="checkbox"] {
+  @apply w-4 h-4 rounded border-gray-300 cursor-pointer;
+  accent-color: var(--color-primary);
+}
+
+.checkbox-label span {
+  @apply text-sm text-gray-600;
+}
+
+.forgot-link {
+  @apply text-sm font-medium transition-colors;
+  color: var(--color-primary);
+}
+
+.forgot-link:hover {
+  color: var(--color-primary-shade);
+}
+
+.password-toggle {
+  @apply absolute right-2 top-[34px] p-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 rounded-md transition-colors;
+  min-height: 36px;
+  min-width: 36px;
+}
+
+.password-toggle .icon {
+  @apply text-base;
+}
+
+.error-container {
+  @apply mb-4;
+}
+
+.divider {
+  @apply flex items-center gap-3 my-6;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  @apply flex-1 h-px bg-gray-200;
+}
+
+.divider span {
+  @apply text-xs text-gray-400 uppercase tracking-wider;
+}
+
+@media (max-width: 767px) {
+  .form-options { @apply flex-col items-start gap-2 mb-5; }
+  .checkbox-label { @apply text-sm; }
+  .forgot-link { @apply text-sm; }
+}

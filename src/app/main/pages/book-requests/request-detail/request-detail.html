@@ -1,0 +1,101 @@
+<div class="detail-page" *ngIf="request">
+  <div class="detail-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <div class="header-info">
+      <h2 class="detail-title">Book Request</h2>
+      <span class="badge-status" [ngClass]="'status-' + request.status">{{ request.status }}</span>
+    </div>
+    <div class="header-actions" *ngIf="request.status === 'pending'">
+      <button class="btn-approve" (click)="approveRequest()">
+        <i class="pi pi-check"></i> Approve
+      </button>
+      <button class="btn-reject" (click)="rejectRequest()">
+        <i class="pi pi-times"></i> Reject
+      </button>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="stat-card">
+      <i class="pi pi-building stat-icon school"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ request.schoolName }}</span>
+        <span class="stat-label">School</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-book stat-icon subject"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ request.subjectId }}</span>
+        <span class="stat-label">Subject</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-box stat-icon quantity"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ request.quantity }}</span>
+        <span class="stat-label">Books Requested</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3 class="card-title">Request Details</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Grade</span>
+        <span class="info-value">{{ request.gradeId }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Requested By</span>
+        <span class="info-value">{{ request.requestedBy }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Date Submitted</span>
+        <span class="info-value">{{ request.createdAt | date:'mediumDate' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Last Updated</span>
+        <span class="info-value">{{ request.updatedAt | date:'mediumDate' }}</span>
+      </div>
+      <div class="info-item" *ngIf="request.approvedBy">
+        <span class="info-label">Approved By</span>
+        <span class="info-value">{{ request.approvedBy }}</span>
+      </div>
+      <div class="info-item full">
+        <span class="info-label">Reason</span>
+        <span class="info-value">{{ request.reason }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Timeline -->
+  <div class="info-card">
+    <h3 class="card-title">Status Timeline</h3>
+    <div class="timeline">
+      <div class="timeline-item active">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <span class="timeline-title">Request Submitted</span>
+          <span class="timeline-date">{{ request.createdAt | date:'medium' }}</span>
+        </div>
+      </div>
+      <div class="timeline-item" [class.active]="request.status === 'approved' || request.status === 'fulfilled' || request.status === 'rejected'">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <span class="timeline-title">{{ request.status === 'rejected' ? 'Request Rejected' : 'Request Reviewed' }}</span>
+          <span class="timeline-date" *ngIf="request.status !== 'pending'">{{ request.updatedAt | date:'medium' }}</span>
+        </div>
+      </div>
+      <div class="timeline-item" [class.active]="request.status === 'fulfilled'">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <span class="timeline-title">Books Delivered</span>
+          <span class="timeline-date" *ngIf="request.status === 'fulfilled'">{{ request.updatedAt | date:'medium' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

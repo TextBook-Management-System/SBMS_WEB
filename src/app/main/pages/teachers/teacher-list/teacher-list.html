@@ -1,0 +1,74 @@
+<div class="page-header">
+  <div class="header-left">
+    <h2 class="page-title">Teachers</h2>
+    <p class="page-desc">Manage teacher records and assignments</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn-secondary" (click)="assignTeacher()">
+      <i class="pi pi-link"></i>
+      <span>Assign</span>
+    </button>
+    <button class="btn-add" (click)="addTeacher()">
+      <i class="pi pi-plus"></i>
+      <span>Add Teacher</span>
+    </button>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="search-bar">
+  <i class="pi pi-search search-icon"></i>
+  <input
+    type="text"
+    placeholder="Search by name, staff number, or email..."
+    [value]="searchTerm"
+    (input)="onSearch($any($event.target).value)"
+    class="search-input"
+  />
+</div>
+
+<!-- Table -->
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Staff No</th>
+        <th>Email</th>
+        <th>School</th>
+        <th>Subjects</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let teacher of paginatedTeachers">
+        <td class="cell-name">{{ teacher.firstName }} {{ teacher.lastName }}</td>
+        <td><span class="badge-code">{{ teacher.staffNumber }}</span></td>
+        <td>{{ teacher.email }}</td>
+        <td>{{ teacher.schoolId }}</td>
+        <td>{{ getSubjects(teacher) }}</td>
+        <td class="cell-actions">
+          <button class="action-btn edit" (click)="editTeacher(teacher.id)" title="Edit">
+            <i class="pi pi-pencil"></i>
+          </button>
+          <button class="action-btn delete" (click)="deleteTeacher(teacher.id)" title="Delete">
+            <i class="pi pi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredTeachers.length === 0 && !isLoading">
+        <td colspan="6" class="empty-state">
+          <i class="pi pi-users"></i>
+          <p>No teachers found</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-paginator
+  [totalItems]="filteredTeachers.length"
+  [pageSize]="pageSize"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-paginator>

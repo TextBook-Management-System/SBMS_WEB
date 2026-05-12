@@ -1,0 +1,53 @@
+<div class="app-layout">
+  <app-sidebar
+    [collapsed]="sidebarCollapsed"
+    (collapsedChange)="sidebarCollapsed = $event">
+  </app-sidebar>
+
+  <div class="main-area" [class.sidebar-collapsed]="sidebarCollapsed">
+    <!-- Top bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <button class="mobile-menu-btn" (click)="toggleMobileSidebar()" aria-label="Toggle menu">
+          <i class="pi pi-bars"></i>
+        </button>
+        <div class="page-meta">
+          <div class="page-heading-row">
+            <div class="page-icon-badge">
+              <i [class]="pageIcon"></i>
+            </div>
+            <div class="page-text">
+              <h1 class="page-heading">{{ pageTitle }}</h1>
+              <p class="page-description">{{ pageDescription }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <button class="header-action-btn" aria-label="Search" title="Search">
+          <i class="pi pi-search"></i>
+        </button>
+        <button class="header-action-btn" aria-label="Notifications" title="Notifications">
+          <i class="pi pi-bell"></i>
+          <span class="notification-dot"></span>
+        </button>
+        <div class="divider-v"></div>
+        <div class="user-pill">
+          <div class="user-pill-avatar">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="user-pill-info">
+            <span class="user-pill-name">{{ currentUser?.full_name || 'Admin User' }}</span>
+            <span class="user-pill-role">{{ currentUser?.role === 'DeptAdmin' ? 'Department Admin' : currentUser?.role === 'SchoolAdmin' ? 'School Admin' : currentUser?.role || 'User' }}</span>
+          </div>
+          <i class="pi pi-chevron-down user-pill-chevron"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

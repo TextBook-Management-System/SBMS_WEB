@@ -1,0 +1,221 @@
+@reference "tailwindcss";
+
+/* Welcome banner */
+.welcome-banner {
+  @apply flex items-center justify-between bg-white rounded-xl border border-gray-100 px-6 py-5 mb-6 shadow-sm;
+}
+
+.welcome-text h2 {
+  @apply text-lg font-bold text-gray-800;
+}
+
+.welcome-text p {
+  @apply text-sm text-gray-500 mt-0.5;
+}
+
+.welcome-date {
+  @apply flex items-center gap-2 text-sm text-gray-500;
+}
+
+.welcome-date i {
+  color: var(--color-primary);
+}
+
+/* Stats grid */
+.stats-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6;
+}
+
+.stat-card {
+  @apply flex items-center gap-4 bg-white rounded-xl p-5 border border-gray-100 shadow-sm relative;
+}
+
+.stat-icon-box {
+  @apply w-12 h-12 rounded-lg flex items-center justify-center shrink-0;
+}
+
+.stat-icon-box i { @apply text-xl; }
+.stat-icon-box.schools { @apply bg-blue-50 text-blue-600; }
+.stat-icon-box.books { background: var(--color-badge-good); color: var(--color-primary); }
+.stat-icon-box.learners { @apply bg-purple-50 text-purple-600; }
+.stat-icon-box.requests { @apply bg-amber-50 text-amber-600; }
+
+.stat-info { @apply flex flex-col; }
+.stat-value { @apply text-2xl font-bold; color: var(--color-navy); }
+.stat-label { @apply text-xs text-gray-500; }
+
+.stat-trend {
+  @apply absolute top-4 right-4 text-xs font-medium flex items-center gap-0.5 px-2 py-0.5 rounded-full;
+}
+
+.stat-trend.up { @apply bg-green-50 text-green-600; }
+.stat-trend.down { @apply bg-red-50 text-red-600; }
+.stat-trend i { @apply text-xs; }
+
+/* Middle grid */
+.middle-grid {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6;
+}
+
+/* Card base */
+.card {
+  @apply bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden;
+}
+
+.card-header {
+  @apply flex items-center justify-between px-6 py-4 border-b border-gray-50;
+}
+
+.card-header h3 {
+  @apply text-sm font-semibold text-gray-800;
+}
+
+.card-badge {
+  @apply text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium;
+}
+
+.card-badge.warning {
+  @apply bg-amber-50 text-amber-700;
+}
+
+.card-link {
+  @apply text-xs font-medium transition-colors;
+  color: var(--color-primary);
+}
+
+.card-link:hover {
+  color: var(--color-primary-shade);
+}
+
+/* Condition bars */
+.condition-card { @apply p-0; }
+.condition-bars { @apply px-6 py-5 space-y-4; }
+
+.condition-row {
+  @apply flex items-center gap-3;
+}
+
+.condition-label {
+  @apply flex items-center gap-2 w-24 shrink-0;
+}
+
+.condition-label span:last-child {
+  @apply text-xs text-gray-600;
+}
+
+.condition-dot {
+  @apply w-2.5 h-2.5 rounded-full shrink-0;
+}
+
+.condition-dot.new { background: #3b82f6; }
+.condition-dot.good { background: var(--color-primary); }
+.condition-dot.fair { background: #f59e0b; }
+.condition-dot.damaged { background: #ef4444; }
+.condition-dot.lost { background: #9ca3af; }
+
+.condition-bar-track {
+  @apply flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden;
+}
+
+.condition-bar-fill {
+  @apply h-full rounded-full transition-all duration-500;
+}
+
+.condition-bar-fill.new { background: #3b82f6; }
+.condition-bar-fill.good { background: var(--color-primary); }
+.condition-bar-fill.fair { background: #f59e0b; }
+.condition-bar-fill.damaged { background: #ef4444; }
+.condition-bar-fill.lost { background: #9ca3af; }
+
+.condition-count {
+  @apply text-xs font-medium text-gray-600 w-12 text-right;
+}
+
+/* Activity list */
+.activity-card { @apply p-0; }
+.activity-list { @apply divide-y divide-gray-50; }
+
+.activity-item {
+  @apply flex items-start gap-3 px-6 py-3.5;
+}
+
+.activity-icon {
+  @apply w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5;
+}
+
+.activity-icon i { @apply text-xs; }
+.activity-icon.approved { @apply bg-green-50 text-green-600; }
+.activity-icon.pending { @apply bg-amber-50 text-amber-600; }
+.activity-icon.transfer { @apply bg-blue-50 text-blue-600; }
+.activity-icon.new-entry { @apply bg-purple-50 text-purple-600; }
+.activity-icon.rejected { @apply bg-red-50 text-red-600; }
+
+.activity-content { @apply flex flex-col; }
+.activity-text { @apply text-sm text-gray-700; }
+.activity-text strong { @apply font-medium; color: var(--color-navy); }
+.activity-time { @apply text-xs text-gray-400 mt-0.5; }
+
+/* Bottom grid */
+.bottom-grid {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-6;
+}
+
+/* School ranking */
+.school-ranking { @apply divide-y divide-gray-50; }
+
+.rank-item {
+  @apply flex items-center justify-between px-6 py-3.5;
+}
+
+.rank-info { @apply flex flex-col; }
+.rank-name { @apply text-sm font-medium; color: var(--color-navy); }
+.rank-detail { @apply text-xs text-gray-500 mt-0.5; }
+
+.rank-ratio { @apply flex flex-col items-end; }
+.ratio-value { @apply text-lg font-bold text-red-500; }
+.ratio-value.good { color: var(--color-primary); }
+.ratio-label { @apply text-xs text-gray-400; }
+
+.rank-item.deficit { @apply border-l-3 border-l-red-400; }
+.rank-item.surplus { @apply border-l-3 border-l-green-400; }
+
+/* Quick actions */
+.quick-actions {
+  @apply grid grid-cols-2 sm:grid-cols-3 gap-3 p-5;
+}
+
+.quick-action-btn {
+  @apply flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all text-center no-underline;
+}
+
+.quick-action-btn span {
+  @apply text-xs font-medium text-gray-600;
+}
+
+.qa-icon {
+  @apply w-10 h-10 rounded-lg flex items-center justify-center;
+}
+
+.qa-icon i { @apply text-lg; }
+.qa-icon.requests { @apply bg-amber-50 text-amber-600; }
+.qa-icon.learners { @apply bg-purple-50 text-purple-600; }
+.qa-icon.ai { background: var(--color-badge-good); color: var(--color-primary); }
+.qa-icon.reports { @apply bg-blue-50 text-blue-600; }
+.qa-icon.inventory { @apply bg-slate-100 text-slate-600; }
+.qa-icon.schools { @apply bg-indigo-50 text-indigo-600; }
+
+/* Mobile */
+@media (max-width: 767px) {
+  .welcome-banner { @apply flex-col items-start gap-2 px-4 py-4; }
+  .welcome-date { @apply text-xs; }
+  .stats-grid { @apply grid-cols-2 gap-3; }
+  .stat-card { @apply p-4 gap-3; }
+  .stat-icon-box { @apply w-10 h-10; }
+  .stat-icon-box i { @apply text-base; }
+  .stat-value { @apply text-lg; }
+  .stat-trend { @apply hidden; }
+  .middle-grid { @apply grid-cols-1 gap-4; }
+  .bottom-grid { @apply grid-cols-1 gap-4; }
+  .quick-actions { @apply grid-cols-2 gap-2 p-4; }
+  .quick-action-btn { @apply p-3; }
+}

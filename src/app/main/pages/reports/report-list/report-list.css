@@ -1,0 +1,26 @@
+@reference "tailwindcss";
+
+.page-header { @apply flex items-center justify-between mb-6; }
+.header-left { @apply flex flex-col; }
+.page-title { @apply text-xl font-bold text-gray-800; }
+.page-desc { @apply text-sm text-gray-500 mt-0.5; }
+
+.reports-grid { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4; }
+
+.report-card { @apply bg-white rounded-xl border border-gray-100 p-5 shadow-sm flex flex-col gap-4 hover:shadow-md transition-shadow; }
+.report-icon { @apply w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center; }
+.report-icon i { @apply text-lg text-green-600; }
+.report-info { @apply flex-1 flex flex-col gap-1; }
+.report-title { @apply text-sm font-semibold text-gray-800; }
+.report-desc { @apply text-xs text-gray-500 leading-relaxed; }
+.report-category { @apply text-xs font-medium text-green-600 mt-1; }
+
+.btn-generate {
+  @apply flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors;
+  background-color: var(--color-primary);
+}
+.btn-generate:hover { background-color: var(--color-primary-shade); }
+
+@media (max-width: 767px) {
+  .reports-grid { @apply grid-cols-1; }
+}

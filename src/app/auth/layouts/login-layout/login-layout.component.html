@@ -1,0 +1,55 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+  <app-input
+    id="email"
+    type="email"
+    label="Email address"
+    placeholder="you@school.edu"
+    formControlName="email"
+    prefixIcon="pi pi-envelope"
+    [hasError]="!!emailErrors"
+    [errorMessage]="emailErrors || undefined"
+    [required]="true">
+  </app-input>
+
+  <div class="password-field">
+    <app-input
+      id="password"
+      [type]="passwordVisible ? 'text' : 'password'"
+      label="Password"
+      placeholder="Enter your password"
+      formControlName="password"
+      prefixIcon="pi pi-lock"
+      [hasError]="!!passwordErrors"
+      [errorMessage]="passwordErrors || undefined"
+      [required]="true">
+      <button
+        type="button"
+        suffix
+        class="password-toggle"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="passwordVisible ? 'Hide password' : 'Show password'">
+        <i class="pi" [class.pi-eye]="!passwordVisible" [class.pi-eye-slash]="passwordVisible"></i>
+      </button>
+    </app-input>
+  </div>
+
+  <div class="form-options">
+    <label class="checkbox-label" *ngIf="showRememberMe">
+      <input type="checkbox" formControlName="rememberMe" />
+      <span>Remember me</span>
+    </label>
+    <a routerLink="/auth/reset-password" class="forgot-link">Forgot password?</a>
+  </div>
+
+  <div class="error-container" *ngIf="authError">
+    <app-form-error [message]="authError"></app-form-error>
+  </div>
+
+  <app-button
+    type="submit"
+    variant="primary"
+    [disabled]="!loginForm.valid"
+    [loading]="isLoading">
+    <i class="pi pi-sign-in" style="margin-right: 6px;"></i> Sign In
+  </app-button>
+</form>

@@ -1,0 +1,41 @@
+@reference "tailwindcss";
+
+.detail-page { @apply max-w-4xl; }
+.detail-header { @apply flex items-center gap-3 mb-6; }
+.back-btn { @apply w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors; }
+.header-info { @apply flex-1 flex items-center gap-3; }
+.detail-title { @apply text-xl font-bold text-gray-800; }
+.badge-code { @apply px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-medium; }
+.btn-edit { @apply flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 transition-colors; }
+
+.detail-grid { @apply grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6; }
+.stat-card { @apply flex items-center gap-3 bg-white rounded-xl border border-gray-100 p-4 shadow-sm; }
+.stat-icon { @apply text-xl; }
+.stat-icon.id { @apply text-purple-500; }
+.stat-icon.dob { @apply text-amber-500; }
+.stat-icon.books { @apply text-green-500; }
+.stat-info { @apply flex flex-col; }
+.stat-value { @apply text-lg font-bold text-gray-800; }
+.stat-label { @apply text-xs text-gray-500; }
+
+.info-card { @apply bg-white rounded-xl border border-gray-100 p-6 shadow-sm mb-6; }
+.card-title { @apply text-base font-semibold text-gray-800 mb-4 pb-3 border-b border-gray-100; }
+.info-grid { @apply grid grid-cols-1 sm:grid-cols-2 gap-4; }
+.info-item { @apply flex flex-col gap-0.5; }
+.info-item.full { @apply sm:col-span-2; }
+.info-label { @apply text-xs font-medium text-gray-500 uppercase tracking-wider; }
+.info-value { @apply text-sm text-gray-800; }
+.capitalize { @apply capitalize; }
+
+.books-list { @apply flex flex-col gap-3; }
+.book-item { @apply flex items-center gap-3 p-3 rounded-lg bg-gray-50; }
+.book-item i { @apply text-green-500; }
+.book-info { @apply flex-1 flex flex-col; }
+.book-title { @apply text-sm font-medium text-gray-800; }
+.book-meta { @apply text-xs text-gray-500; }
+
+.badge-condition { @apply px-2 py-0.5 rounded text-xs font-medium capitalize; }
+.condition-new { @apply bg-blue-50 text-blue-700; }
+.condition-good { @apply bg-green-50 text-green-700; }
+.condition-fair { @apply bg-amber-50 text-amber-700; }
+.condition-damaged { @apply bg-red-50 text-red-700; }

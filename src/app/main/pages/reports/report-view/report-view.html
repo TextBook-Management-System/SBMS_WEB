@@ -1,0 +1,56 @@
+<div class="report-page" *ngIf="report">
+  <div class="report-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <div class="header-info">
+      <h2 class="report-title">{{ report.title }}</h2>
+      <span class="report-date">Generated: {{ report.generatedAt | date:'medium' }}</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-export" (click)="exportCsv()">
+        <i class="pi pi-file"></i> CSV
+      </button>
+      <button class="btn-export primary" (click)="exportPdf()">
+        <i class="pi pi-file-pdf"></i> PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="report-summary">
+    <p>{{ report.summary }}</p>
+  </div>
+
+  <!-- Chart Placeholder -->
+  <div class="chart-placeholder">
+    <i class="pi pi-chart-bar"></i>
+    <p>Chart visualization placeholder</p>
+    <span>Charts will be rendered here with a charting library</span>
+  </div>
+
+  <!-- Data Table -->
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>School</th>
+          <th>Value</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of report.data">
+          <td class="cell-name">{{ row['school'] }}</td>
+          <td>{{ $any(row['value']) | number }}</td>
+          <td>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="row['percentage']"></div>
+              <span class="progress-text">{{ row['percentage'] }}%</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

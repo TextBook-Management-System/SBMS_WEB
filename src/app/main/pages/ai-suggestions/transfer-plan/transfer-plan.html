@@ -1,0 +1,97 @@
+<div class="detail-page" *ngIf="suggestion">
+  <div class="detail-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <div class="header-info">
+      <h2 class="detail-title">Transfer Plan</h2>
+      <span class="badge-status" [ngClass]="'status-' + suggestion.status">{{ suggestion.status }}</span>
+    </div>
+    <div class="header-actions" *ngIf="suggestion.status === 'pending'">
+      <button class="btn-accept" (click)="acceptPlan()">
+        <i class="pi pi-check"></i> Accept
+      </button>
+      <button class="btn-modify">
+        <i class="pi pi-pencil"></i> Modify
+      </button>
+      <button class="btn-reject" (click)="rejectPlan()">
+        <i class="pi pi-times"></i> Reject
+      </button>
+    </div>
+  </div>
+
+  <!-- Destination Info -->
+  <div class="detail-grid">
+    <div class="stat-card">
+      <i class="pi pi-building stat-icon destination"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ suggestion.destinationSchoolName }}</span>
+        <span class="stat-label">Destination School</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-book stat-icon books"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ suggestion.totalNeeded }}</span>
+        <span class="stat-label">Books Needed</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-chart-line stat-icon confidence"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ suggestion.confidence }}%</span>
+        <span class="stat-label">Confidence</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transfer Details -->
+  <div class="info-card">
+    <h3 class="card-title">Transfer Details</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Subject</span>
+        <span class="info-value">{{ suggestion.subjectId }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Grade</span>
+        <span class="info-value">{{ suggestion.gradeId }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Created</span>
+        <span class="info-value">{{ suggestion.createdAt | date:'mediumDate' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Total Sources</span>
+        <span class="info-value">{{ suggestion.sources.length }} school(s)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Source Schools Table -->
+  <div class="info-card">
+    <h3 class="card-title">Source Schools</h3>
+    <div class="table-container-inner">
+      <table class="source-table">
+        <thead>
+          <tr>
+            <th>School</th>
+            <th>Available</th>
+            <th>Suggested Qty</th>
+            <th>Condition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let source of suggestion.sources">
+            <td class="cell-name">{{ source.schoolName }}</td>
+            <td>{{ source.availableQuantity }}</td>
+            <td><strong>{{ source.suggestedQuantity }}</strong></td>
+            <td>
+              <span class="badge-condition" [ngClass]="'condition-' + source.bookCondition">{{ source.bookCondition }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

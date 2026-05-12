@@ -1,0 +1,82 @@
+<div class="detail-page" *ngIf="parent">
+  <div class="detail-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <div class="header-info">
+      <h2 class="detail-title">{{ parent.firstName }} {{ parent.lastName }}</h2>
+    </div>
+    <button class="btn-edit" (click)="editParent()">
+      <i class="pi pi-pencil"></i> Edit
+    </button>
+  </div>
+
+  <div class="detail-grid">
+    <div class="stat-card">
+      <i class="pi pi-envelope stat-icon email"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ parent.email }}</span>
+        <span class="stat-label">Email</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-phone stat-icon phone"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ parent.phone }}</span>
+        <span class="stat-label">Phone</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="pi pi-users stat-icon learners"></i>
+      <div class="stat-info">
+        <span class="stat-value">{{ linkedLearners.length }}</span>
+        <span class="stat-label">Linked Learners</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3 class="card-title">Parent Information</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">First Name</span>
+        <span class="info-value">{{ parent.firstName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Last Name</span>
+        <span class="info-value">{{ parent.lastName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">ID Number</span>
+        <span class="info-value">{{ parent.idNumber }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Phone</span>
+        <span class="info-value">{{ parent.phone }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Email</span>
+        <span class="info-value">{{ parent.email }}</span>
+      </div>
+      <div class="info-item full">
+        <span class="info-label">Address</span>
+        <span class="info-value">{{ parent.address }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Linked Learners -->
+  <div class="info-card" *ngIf="linkedLearners.length > 0">
+    <h3 class="card-title">Linked Learners</h3>
+    <div class="learners-list">
+      <div class="learner-item" *ngFor="let learner of linkedLearners">
+        <i class="pi pi-user"></i>
+        <div class="learner-info">
+          <span class="learner-name">{{ learner.firstName }} {{ learner.lastName }}</span>
+          <span class="learner-meta">{{ learner.gradeId }} · {{ learner.gender }}</span>
+        </div>
+        <span class="badge-grade">{{ learner.gradeId }}</span>
+      </div>
+    </div>
+  </div>
+</div>

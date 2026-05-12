@@ -1,0 +1,42 @@
+@reference "tailwindcss";
+
+.home-container {
+  @apply p-6 md:p-8 lg:p-10;
+}
+
+.home-heading {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-white;
+}
+
+/* Mobile breakpoint (<768px) */
+@media (max-width: 767px) {
+  .home-container {
+    @apply p-4;
+  }
+
+  .home-heading {
+    @apply text-2xl font-bold;
+  }
+}
+
+/* Tablet breakpoint (768px-1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .home-container {
+    @apply p-6;
+  }
+
+  .home-heading {
+    @apply text-3xl font-bold;
+  }
+}
+
+/* Desktop breakpoint (1024px+) */
+@media (min-width: 1024px) {
+  .home-container {
+    @apply p-8;
+  }
+
+  .home-heading {
+    @apply text-4xl font-bold;
+  }
+}

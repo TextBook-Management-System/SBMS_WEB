@@ -1,0 +1,78 @@
+<div class="page-header">
+  <div class="header-left">
+    <h2 class="page-title">Book Requests</h2>
+    <p class="page-desc">Manage book requests from schools</p>
+  </div>
+  <button class="btn-add" (click)="addRequest()">
+    <i class="pi pi-plus"></i>
+    <span>New Request</span>
+  </button>
+</div>
+
+<!-- Search -->
+<div class="search-bar">
+  <i class="pi pi-search search-icon"></i>
+  <input
+    type="text"
+    placeholder="Search by school, subject, or status..."
+    [value]="searchTerm"
+    (input)="onSearch($any($event.target).value)"
+    class="search-input"
+  />
+</div>
+
+<!-- Table -->
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>School</th>
+        <th>Subject</th>
+        <th>Grade</th>
+        <th>Quantity</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of paginatedRequests">
+        <td class="cell-name">{{ request.schoolName }}</td>
+        <td>{{ request.subjectId }}</td>
+        <td>{{ request.gradeId }}</td>
+        <td>{{ request.quantity }}</td>
+        <td>
+          <span class="badge-status" [ngClass]="'status-' + request.status">{{ request.status }}</span>
+        </td>
+        <td>{{ request.createdAt | date:'mediumDate' }}</td>
+        <td class="cell-actions">
+          <button class="action-btn view" (click)="viewRequest(request.id)" title="View">
+            <i class="pi pi-eye"></i>
+          </button>
+          <button class="action-btn approve" *ngIf="request.status === 'pending'" (click)="approveRequest(request.id)" title="Approve">
+            <i class="pi pi-check"></i>
+          </button>
+          <button class="action-btn reject" *ngIf="request.status === 'pending'" (click)="rejectRequest(request.id)" title="Reject">
+            <i class="pi pi-times"></i>
+          </button>
+          <button class="action-btn delete" (click)="deleteRequest(request.id)" title="Delete">
+            <i class="pi pi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredRequests.length === 0 && !isLoading">
+        <td colspan="7" class="empty-state">
+          <i class="pi pi-inbox"></i>
+          <p>No requests found</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-paginator
+  [totalItems]="filteredRequests.length"
+  [pageSize]="pageSize"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-paginator>

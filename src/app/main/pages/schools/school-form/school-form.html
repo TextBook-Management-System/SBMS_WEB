@@ -1,0 +1,54 @@
+<div class="form-page">
+  <div class="form-header">
+    <button class="back-btn" (click)="cancel()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <h2 class="form-title">{{ isEdit ? 'Edit School' : 'Add New School' }}</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>School Name *</label>
+        <input formControlName="name" placeholder="Enter school name" />
+      </div>
+      <div class="form-field">
+        <label>School Code *</label>
+        <input formControlName="code" placeholder="e.g. GP001" />
+      </div>
+      <div class="form-field">
+        <label>District *</label>
+        <input formControlName="district" placeholder="Enter district" />
+      </div>
+      <div class="form-field">
+        <label>Province *</label>
+        <input formControlName="province" placeholder="Enter province" />
+      </div>
+      <div class="form-field full">
+        <label>Address *</label>
+        <input formControlName="address" placeholder="Enter full address" />
+      </div>
+      <div class="form-field">
+        <label>Contact Number *</label>
+        <input formControlName="contactNumber" placeholder="e.g. 011-555-0101" />
+      </div>
+      <div class="form-field">
+        <label>Email *</label>
+        <input formControlName="email" type="email" placeholder="school@example.edu" />
+      </div>
+      <div class="form-field full">
+        <label>Principal Name *</label>
+        <input formControlName="principalName" placeholder="Enter principal's name" />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn-submit" [disabled]="!form.valid || isLoading">
+        <i class="pi pi-check" *ngIf="!isLoading"></i>
+        <i class="pi pi-spin pi-spinner" *ngIf="isLoading"></i>
+        {{ isEdit ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div>

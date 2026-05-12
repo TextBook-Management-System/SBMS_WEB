@@ -1,0 +1,24 @@
+<div class="page-header">
+  <div class="header-left">
+    <h2 class="page-title">Reports</h2>
+    <p class="page-desc">Generate and view system reports</p>
+  </div>
+</div>
+
+<!-- Report Cards -->
+<div class="reports-grid">
+  <div class="report-card" *ngFor="let report of reportTypes">
+    <div class="report-icon">
+      <i [class]="report.icon"></i>
+    </div>
+    <div class="report-info">
+      <h3 class="report-title">{{ report.title }}</h3>
+      <p class="report-desc">{{ report.description }}</p>
+      <span class="report-category">{{ report.category }}</span>
+    </div>
+    <button class="btn-generate" (click)="generateReport(report.id)">
+      <i class="pi pi-chart-bar"></i>
+      Generate
+    </button>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="form-page">
+  <div class="form-header">
+    <button class="back-btn" (click)="cancel()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    <h2 class="form-title">{{ isEdit ? 'Edit Learner' : 'Add New Learner' }}</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>First Name *</label>
+        <input formControlName="firstName" placeholder="Enter first name" />
+      </div>
+      <div class="form-field">
+        <label>Last Name *</label>
+        <input formControlName="lastName" placeholder="Enter last name" />
+      </div>
+      <div class="form-field">
+        <label>ID Number *</label>
+        <input formControlName="idNumber" placeholder="Enter ID number" />
+      </div>
+      <div class="form-field">
+        <label>Grade *</label>
+        <select formControlName="gradeId">
+          <option value="">Select a grade</option>
+          <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Date of Birth *</label>
+        <input formControlName="dateOfBirth" type="date" />
+      </div>
+      <div class="form-field">
+        <label>Gender *</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" formControlName="gender" value="male" />
+            <span>Male</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" formControlName="gender" value="female" />
+            <span>Female</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" formControlName="gender" value="other" />
+            <span>Other</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn-submit" [disabled]="!form.valid || isLoading">
+        <i class="pi pi-check" *ngIf="!isLoading"></i>
+        <i class="pi pi-spin pi-spinner" *ngIf="isLoading"></i>
+        {{ isEdit ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div>

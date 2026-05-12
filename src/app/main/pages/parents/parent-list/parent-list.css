@@ -1,0 +1,10 @@
+@reference "tailwindcss";
+
+.header-left { @apply flex flex-col; }
+
+@media (max-width: 767px) {
+  .page-header { @apply flex-col items-start gap-3; }
+  .btn-add { @apply w-full justify-center; }
+  .table-container { @apply overflow-x-auto; }
+  .data-table { @apply min-w-[600px]; }
+}
