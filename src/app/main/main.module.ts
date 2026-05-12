@@ -59,7 +59,7 @@ const mainRoutes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
 

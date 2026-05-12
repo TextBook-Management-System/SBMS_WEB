@@ -20,6 +20,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   navItems: NavItem[] = [];
   activeRoute = '';
   currentUser: string = '';
+  currentUserRole: string = '';
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -29,9 +30,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // TODO: Get actual role from auth service
-    const userRole = UserRole.DepartmentAdmin;
-    this.navItems = this.navigationService.getNavItemsForRole(userRole);
+    // Default nav items until user loads
+    this.navItems = this.navigationService.getNavItemsForRole(UserRole.SchoolAdmin);
 
     this.activeRoute = this.router.url;
     this.router.events
@@ -46,7 +46,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.currentUser = user?.name || 'User';
+        this.currentUser = user?.full_name || 'User';
+        this.currentUserRole = this.formatRole(user?.roles?.[0]?.role);
+        console.log(user)
+        // Update nav items based on actual user role
+        const role = this.mapApiRoleToUserRole(user?.roles?.[0]?.role);
+        this.navItems = this.navigationService.getNavItemsForRole(role);
       });
   }
 
@@ -62,6 +67,27 @@ export class SidebarComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
+  }
+
+  private formatRole(role: string | undefined): string {
+    if (!role) return 'User';
+    const roleMap: Record<string, string> = {
+      'DeptAdmin': 'Department Admin',
+      'SchoolAdmin': 'School Admin',
+      'Teacher': 'Teacher',
+      'Parent': 'Parent'
+    };
+    return roleMap[role] || role;
+  }
+
+  private mapApiRoleToUserRole(role: string | undefined): UserRole {
+    switch (role) {
+      case 'DeptAdmin': return UserRole.DepartmentAdmin;
+      case 'SchoolAdmin': return UserRole.SchoolAdmin;
+      case 'Teacher': return UserRole.Teacher;
+      case 'Parent': return UserRole.Parent;
+      default: return UserRole.SchoolAdmin;
+    }
   }
 
   ngOnDestroy(): void {

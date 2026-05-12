@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, finalize } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -44,7 +44,12 @@ export class LoginLayoutComponent implements OnInit, OnDestroy {
       const { email, password, rememberMe } = this.loginForm.value;
 
       this.authService.login(email, password, rememberMe)
-        .pipe(takeUntil(this.destroy$))
+        .pipe(
+          finalize(() => {
+            this.isLoading = false;
+          }),
+          takeUntil(this.destroy$)
+        )
         .subscribe({
           next: () => this.handleLoginSuccess(),
           error: (error) => this.handleLoginError(error)
@@ -74,13 +79,11 @@ export class LoginLayoutComponent implements OnInit, OnDestroy {
   }
 
   private handleLoginSuccess(): void {
-    this.isLoading = false;
     const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/app/dashboard';
     this.router.navigate([returnUrl]);
   }
 
   private handleLoginError(error: any): void {
-    this.isLoading = false;
     this.authError = error.message || 'An error occurred. Please try again later.';
   }
 

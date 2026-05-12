@@ -3,7 +3,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../auth/services/auth.service';
-import { User } from '../../auth/models/user.model';
+import { User, UserWithRoles } from '../../auth/models/user.model';
 
 interface PageMeta {
   title: string;
@@ -18,7 +18,7 @@ interface PageMeta {
   styleUrls: ['./main-layout.component.css']
 })
 export class MainLayoutComponent implements OnInit, OnDestroy {
-  currentUser: User | null = null;
+  currentUser: UserWithRoles | null = null;
   sidebarCollapsed = false;
   pageTitle = 'Dashboard';
   pageIcon = 'pi pi-home';
