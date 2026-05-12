@@ -38,7 +38,7 @@
           </div>
           <div class="user-pill-info">
             <span class="user-pill-name">{{ currentUser?.full_name || 'Admin User' }}</span>
-            <span class="user-pill-role">{{ currentUser?.roles?.[0]?.role === 'DeptAdmin' ? 'Department Admin' : currentUser?.roles?.[0]?.role === 'SchoolAdmin' ? 'School Admin' : currentUser?.roles?.[0]?.role || 'User' }}</span>
+            <span class="user-pill-role">{{ currentUser?.role === 'DeptAdmin' ? 'Department Admin' : currentUser?.role === 'SchoolAdmin' ? 'School Admin' : currentUser?.role || 'User' }}</span>
           </div>
           <i class="pi pi-chevron-down user-pill-chevron"></i>
         </div>

@@ -34,8 +34,7 @@ export class AuthService {
   /**
    * POST /api/v1/auth/login
    * Authenticate user with email and password.
-   * Returns access_token (30-min expiry) and refresh_token (7-day expiry).
-   * After storing tokens, fetches the current user profile.
+   * After storing tokens, fetches the current user profile via /auth/me.
    */
   login(email: string, password: string, rememberMe: boolean = false): Observable<TokenResponse> {
     const request: LoginRequest = { email, password };
@@ -46,21 +45,14 @@ export class AuthService {
         this.isAuthenticatedSubject.next(true);
       }),
       switchMap(response => {
-        // After storing tokens, fetch the user profile
-        const userId = this.getUserIdFromToken(response.access_token);
-        if (userId) {
-          return this.http.get<UserWithRoles>(`${this.BASE_URL}/users/${userId}`).pipe(
-            tap(user => this.currentUserSubject.next(user)),
-            catchError(() => {
-              // If user fetch fails, still return the token response
-              console.warn('Could not fetch user profile after login');
-              return of(null);
-            }),
-            // Map back to the original token response
-            switchMap(() => of(response))
-          );
-        }
-        return of(response);
+        return this.http.get<UserWithRoles>(`${this.API_URL}/me`).pipe(
+          tap(user => this.currentUserSubject.next(user)),
+          catchError(() => {
+            console.warn('Could not fetch user profile after login');
+            return of(null);
+          }),
+          switchMap(() => of(response))
+        );
       }),
       catchError(error => this.handleAuthError(error))
     );
@@ -146,43 +138,17 @@ export class AuthService {
   }
 
   /**
-   * Fetch the current user profile by decoding the JWT to get the user ID,
-   * then calling GET /api/v1/users/{id}.
+   * Fetch the current user profile via GET /api/v1/auth/me
    */
   loadCurrentUser(): void {
-    const token = this.getAccessToken();
-    if (!token) return;
+    if (!this.getAccessToken()) return;
 
-    const userId = this.getUserIdFromToken(token);
-    if (!userId) return;
-
-    this.http.get<UserWithRoles>(`${this.BASE_URL}/users/${userId}`).subscribe({
+    this.http.get<UserWithRoles>(`${this.API_URL}/me`).subscribe({
       next: (user) => this.currentUserSubject.next(user),
       error: () => {
-        // If we can't fetch user info, still stay authenticated
         console.warn('Could not fetch user profile');
       }
     });
-  }
-
-  /**
-   * Decode the JWT payload to extract the user ID.
-   * Tries common claim names: sub, user_id, id
-   */
-  private getUserIdFromToken(token: string): number | null {
-    try {
-      const payload = token.split('.')[1];
-      // Handle base64url encoding (replace - with + and _ with /)
-      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-      const decoded = JSON.parse(atob(base64));
-      console.log('JWT payload:', decoded);
-      // Try common claim names
-      const id = decoded.sub || decoded.user_id || decoded.id;
-      return id ? Number(id) : null;
-    } catch (e) {
-      console.error('Failed to decode JWT:', e);
-      return null;
-    }
   }
 
   private storeTokens(response: TokenResponse, rememberMe: boolean): void {

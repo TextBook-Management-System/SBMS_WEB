@@ -20,9 +20,10 @@ interface BookAssignmentDisplay {
 })
 export class ParentBooksComponent implements OnInit {
   assignments: BookAssignmentDisplay[] = [];
+  learners: Learner[] = [];
   isLoading = true;
-  selectedFilter: 'all' | 'pending' | 'accepted' | 'declined' | 'returned' | 'lost' = 'all';
-
+  selectedFilter: 'all' | 'pending' | 'accepted' | 'returned' | 'declined' = 'all';
+  
   showDeclineModal = false;
   showReturnModal = false;
   selectedAssignmentId: string | null = null;
@@ -30,6 +31,7 @@ export class ParentBooksComponent implements OnInit {
   declineNotes = '';
   returnNotes = '';
 
+  // Mock parent ID - in real app this would come from auth service
   parentId = 'p1';
 
   constructor(
@@ -50,28 +52,31 @@ export class ParentBooksComponent implements OnInit {
         book: undefined,
         learner: undefined
       }));
-
+      
+      // Load book and learner details
       assignments.forEach((assignment, index) => {
         this.bookService.getById(assignment.bookId).subscribe(book => {
           if (this.assignments[index]) {
             this.assignments[index].book = book;
           }
         });
+        
         this.learnerService.getById(assignment.learnerId).subscribe(learner => {
           if (this.assignments[index]) {
             this.assignments[index].learner = learner;
           }
         });
       });
-
+      
       this.isLoading = false;
     });
   }
 
   getFilteredAssignments(): BookAssignmentDisplay[] {
-    return this.selectedFilter === 'all'
-      ? this.assignments
-      : this.assignments.filter(a => a.assignment.status === this.selectedFilter);
+    if (this.selectedFilter === 'all') {
+      return this.assignments;
+    }
+    return this.assignments.filter(a => a.assignment.status === this.selectedFilter);
   }
 
   getPendingCount(): number {
@@ -121,11 +126,14 @@ export class ParentBooksComponent implements OnInit {
 
   declineBook(): void {
     if (this.selectedAssignmentId && this.declineReason) {
-      this.bookAssignmentService.declineBook(this.selectedAssignmentId, this.declineReason, this.declineNotes)
-        .subscribe(() => {
-          this.loadBookAssignments();
-          this.closeDeclineModal();
-        });
+      this.bookAssignmentService.declineBook(
+        this.selectedAssignmentId, 
+        this.declineReason,
+        this.declineNotes
+      ).subscribe(() => {
+        this.loadBookAssignments();
+        this.closeDeclineModal();
+      });
     }
   }
 
@@ -148,35 +156,51 @@ export class ParentBooksComponent implements OnInit {
 
   getStatusBadgeClass(status: string): string {
     switch (status) {
-      case 'pending': return 'badge-pending';
-      case 'accepted': return 'badge-accepted';
-      case 'declined': return 'badge-declined';
-      case 'returned': return 'badge-returned';
-      case 'lost': return 'badge-lost';
-      default: return '';
+      case 'pending':
+        return 'badge-pending';
+      case 'accepted':
+        return 'badge-accepted';
+      case 'declined':
+        return 'badge-declined';
+      case 'returned':
+        return 'badge-returned';
+      case 'lost':
+        return 'badge-lost';
+      default:
+        return '';
     }
   }
 
   getStatusIcon(status: string): string {
     switch (status) {
-      case 'pending': return 'pi-clock';
-      case 'accepted': return 'pi-check-circle';
-      case 'declined': return 'pi-times-circle';
-      case 'returned': return 'pi-arrow-left';
-      case 'lost': return 'pi-exclamation-triangle';
-      default: return '';
+      case 'pending':
+        return 'pi-clock';
+      case 'accepted':
+        return 'pi-check-circle';
+      case 'declined':
+        return 'pi-times-circle';
+      case 'returned':
+        return 'pi-arrow-left';
+      case 'lost':
+        return 'pi-exclamation-triangle';
+      default:
+        return '';
     }
   }
 
-  getDeclineReasonLabel(reason: string | undefined): string {
-    const reasonMap: Record<string, string> = {
+  getDeclineReasonLabel(reason: string): string {
+    const reasonMap: { [key: string]: string } = {
       duplicate: 'Already Have Duplicate Copy',
       damaged: 'Book Appears Damaged',
       irrelevant: 'Not Relevant for Child',
       accessibility: 'Accessibility Concerns',
       other: 'Other Reason'
     };
-    return reason ? reasonMap[reason] || reason : '';
+    return reasonMap[reason] || reason;
+  }
+
+  isAccepted(assignment: BookAssignment): boolean {
+    return assignment.status === 'accepted' || assignment.parentResponse?.status === 'accepted';
   }
 
   canReturnOrReport(status: string): boolean {
@@ -185,10 +209,10 @@ export class ParentBooksComponent implements OnInit {
 
   formatDate(date: Date | undefined): string {
     if (!date) return '';
-    return new Date(date).toLocaleDateString('en-ZA', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(date).toLocaleDateString('en-ZA', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
     });
   }
 }

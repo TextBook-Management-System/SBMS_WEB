@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { BookAssignment } from '../models/book-assignment.model';
+import { BookAssignment, BookAssignmentStatus } from '../models/book-assignment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,14 +38,14 @@ export class BookAssignmentService {
       id: 'a3',
       bookId: '7',
       learnerId: '3',
-      parentId: 'p1',
+      parentId: 'p2',
       assignedBy: 'teacher1',
       assignedDate: new Date(2026, 4, 1),
       status: 'declined',
       parentResponse: {
         status: 'declined',
         respondedAt: new Date(2026, 4, 2),
-        respondedBy: 'parent1',
+        respondedBy: 'parent2',
         declineReason: 'duplicate'
       },
       createdAt: new Date(2026, 4, 1),
@@ -54,7 +54,7 @@ export class BookAssignmentService {
     {
       id: 'a4',
       bookId: '10',
-      learnerId: '2',
+      learnerId: '4',
       parentId: 'p1',
       assignedBy: 'teacher2',
       assignedDate: new Date(2026, 3, 28),
@@ -67,6 +67,17 @@ export class BookAssignmentService {
       returnDate: new Date(2026, 5, 10),
       createdAt: new Date(2026, 3, 28),
       updatedAt: new Date(2026, 5, 10)
+    },
+    {
+      id: 'a5',
+      bookId: '14',
+      learnerId: '5',
+      parentId: 'p2',
+      assignedBy: 'teacher1',
+      assignedDate: new Date(2026, 4, 2),
+      status: 'pending',
+      createdAt: new Date(2026, 4, 2),
+      updatedAt: new Date(2026, 4, 2)
     }
   ];
 
@@ -76,6 +87,14 @@ export class BookAssignmentService {
 
   getById(id: string): Observable<BookAssignment | undefined> {
     return of(this.mockAssignments.find(a => a.id === id));
+  }
+
+  getByLearnerId(learnerId: string): Observable<BookAssignment[]> {
+    return of(this.mockAssignments.filter(a => a.learnerId === learnerId));
+  }
+
+  getPendingByParentId(parentId: string): Observable<BookAssignment[]> {
+    return of(this.mockAssignments.filter(a => a.parentId === parentId && a.status === 'pending'));
   }
 
   acceptBook(assignmentId: string, notes?: string): Observable<BookAssignment> {
@@ -126,5 +145,16 @@ export class BookAssignmentService {
       assignment.updatedAt = new Date();
     }
     return of(assignment as BookAssignment);
+  }
+
+  create(assignment: Partial<BookAssignment>): Observable<BookAssignment> {
+    const newAssignment: BookAssignment = {
+      ...assignment as BookAssignment,
+      id: Date.now().toString(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.mockAssignments.push(newAssignment);
+    return of(newAssignment);
   }
 }

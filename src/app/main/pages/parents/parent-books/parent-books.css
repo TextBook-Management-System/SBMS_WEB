@@ -52,11 +52,21 @@
 .status-badge {
   @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap;
 }
-.badge-pending { @apply bg-yellow-50 text-yellow-700; }
-.badge-accepted { @apply bg-green-50 text-green-700; }
-.badge-declined { @apply bg-red-50 text-red-700; }
-.badge-returned { @apply bg-blue-50 text-blue-700; }
-.badge-lost { @apply bg-orange-50 text-orange-700; }
+.badge-pending {
+  @apply bg-yellow-50 text-yellow-700;
+}
+.badge-accepted {
+  @apply bg-green-50 text-green-700;
+}
+.badge-declined {
+  @apply bg-red-50 text-red-700;
+}
+.badge-returned {
+  @apply bg-blue-50 text-blue-700;
+}
+.badge-lost {
+  @apply bg-orange-50 text-orange-700;
+}
 
 .learner-info {
   @apply flex items-center gap-2 text-sm text-gray-600;
@@ -96,7 +106,9 @@
 
 /* Card Actions */
 .card-actions { @apply px-4 pb-4 pt-2 border-t border-gray-100; }
-.action-buttons { @apply flex flex-wrap items-center gap-2; }
+.action-buttons {
+  @apply flex flex-wrap items-center gap-2;
+}
 .status-text { @apply text-sm text-gray-600; }
 
 /* Buttons */
@@ -108,11 +120,21 @@
   @apply flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer border;
 }
 
-.btn-accept { @apply border-green-200 bg-green-50 text-green-700 hover:bg-green-100; }
-.btn-decline { @apply border-red-200 bg-red-50 text-red-700 hover:bg-red-100; }
-.btn-return { @apply border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100; }
-.btn-lost { @apply border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100; }
-.btn-secondary { @apply border-gray-200 bg-white text-gray-700 hover:bg-gray-50; }
+.btn-accept {
+  @apply border-green-200 bg-green-50 text-green-700 hover:bg-green-100;
+}
+.btn-decline {
+  @apply border-red-200 bg-red-50 text-red-700 hover:bg-red-100;
+}
+.btn-return {
+  @apply border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100;
+}
+.btn-lost {
+  @apply border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100;
+}
+.btn-secondary {
+  @apply border-gray-200 bg-white text-gray-700 hover:bg-gray-50;
+}
 
 .btn-accept:disabled,
 .btn-decline:disabled,
@@ -123,17 +145,20 @@
 
 /* Modal Styles */
 .modal-overlay {
-   @apply fixed inset-0 flex items-center justify-center z-50 p-4;
-   background-color: rgba(0, 0, 0, 0.5);
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4;
 }
 
 .modal-content {
   @apply bg-white rounded-lg shadow-lg max-w-md w-full max-h-[90vh] overflow-y-auto;
 }
 
-.modal-header { @apply flex items-center justify-between p-4 border-b border-gray-200; }
+.modal-header {
+  @apply flex items-center justify-between p-4 border-b border-gray-200;
+}
 .modal-header h3 { @apply text-lg font-semibold text-gray-800; }
-.close-btn { @apply w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors; }
+.close-btn {
+  @apply w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors;
+}
 
 .modal-body { @apply p-4 space-y-4; }
 .modal-text { @apply text-sm text-gray-600; }
@@ -146,7 +171,9 @@
 }
 .form-textarea { @apply resize-none; }
 
-.modal-footer { @apply flex gap-3 p-4 border-t border-gray-200; }
+.modal-footer {
+  @apply flex gap-3 p-4 border-t border-gray-200;
+}
 .modal-footer button { @apply flex-1; }
 
 /* Responsive */

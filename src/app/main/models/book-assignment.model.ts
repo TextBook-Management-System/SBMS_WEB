@@ -23,3 +23,11 @@ export interface BookAssignmentResponse {
 }
 
 export type DeclineReason = 'duplicate' | 'damaged' | 'irrelevant' | 'accessibility' | 'other';
+
+export const DECLINE_REASONS: { value: DeclineReason; label: string }[] = [
+  { value: 'duplicate', label: 'Already Have Duplicate Copy' },
+  { value: 'damaged', label: 'Book Appears Damaged' },
+  { value: 'irrelevant', label: 'Not Relevant for Child' },
+  { value: 'accessibility', label: 'Accessibility Concerns' },
+  { value: 'other', label: 'Other Reason' }
+];

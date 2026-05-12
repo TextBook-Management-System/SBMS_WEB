@@ -1,11 +1,13 @@
 <div class="parent-books-container">
+  <!-- Page Header -->
   <div class="page-header">
     <div class="header-left">
       <h2 class="page-title">Children's Books</h2>
-      <p class="page-desc">Manage book assignments for your children</p>
+      <p class="page-desc">Manage books assigned to your children</p>
     </div>
   </div>
 
+  <!-- Stats Cards -->
   <div class="stats-grid">
     <div class="stat-card" [class.active]="selectedFilter === 'all'" (click)="selectedFilter = 'all'">
       <i class="pi pi-book"></i>
@@ -44,19 +46,21 @@
     </div>
   </div>
 
+  <!-- Books List -->
   <div class="books-section">
     <div *ngIf="isLoading" class="loading-state">
       <i class="pi pi-spin pi-spinner"></i>
-      <p>Loading assigned books...</p>
+      <p>Loading books...</p>
     </div>
 
     <div *ngIf="!isLoading && getFilteredAssignments().length === 0" class="empty-state">
       <i class="pi pi-inbox"></i>
-      <p>No books found for this filter</p>
+      <p>No books {{ selectedFilter !== 'all' ? 'in this category' : 'assigned yet' }}</p>
     </div>
 
     <div *ngIf="!isLoading && getFilteredAssignments().length > 0" class="books-list">
       <div class="book-card" *ngFor="let item of getFilteredAssignments()">
+        <!-- Book Header -->
         <div class="card-header">
           <div class="header-top">
             <h3 class="book-title">{{ item.book?.title }}</h3>
@@ -71,6 +75,7 @@
           </div>
         </div>
 
+        <!-- Book Details -->
         <div class="card-content">
           <div class="details-grid">
             <div class="detail-item">
@@ -94,25 +99,29 @@
               <span class="detail-value">{{ formatDate(item.assignment.assignedDate) }}</span>
             </div>
             <div class="detail-item">
-              <span class="detail-label">Condition</span>
+              <span class="detail-label">Book Condition</span>
               <span class="condition-badge" [ngClass]="'condition-' + item.book?.condition">
                 {{ item.book?.condition }}
               </span>
             </div>
           </div>
 
-          <div *ngIf="item.assignment.status === 'declined' && item.assignment.parentResponse?.declineReason" class="decline-info">
+          <!-- Decline Reason Display -->
+          <div *ngIf="item.assignment.status === 'declined' && item.assignment.parentResponse?.declineReason" 
+               class="decline-info">
             <i class="pi pi-info-circle"></i>
             <div>
               <span class="label">Decline Reason:</span>
-              <span>{{ getDeclineReasonLabel(item.assignment.parentResponse?.declineReason) }}</span>
+              <span>{{ getDeclineReasonLabel(item.assignment.parentResponse?.declineReason || '') }}</span>
               <p *ngIf="item.assignment.parentResponse?.notes" class="notes">
                 {{ item.assignment.parentResponse?.notes }}
               </p>
             </div>
           </div>
 
-          <div *ngIf="item.assignment.parentResponse?.notes && item.assignment.status !== 'declined'" class="notes-info">
+          <!-- Parent Notes Display -->
+          <div *ngIf="item.assignment.parentResponse?.notes && item.assignment.status !== 'declined'" 
+               class="notes-info">
             <i class="pi pi-comment"></i>
             <div>
               <span class="label">Notes:</span>
@@ -121,7 +130,9 @@
           </div>
         </div>
 
+        <!-- Card Actions -->
         <div class="card-actions">
+          <!-- Pending State Actions -->
           <div *ngIf="item.assignment.status === 'pending'" class="action-buttons">
             <button class="btn-accept" (click)="acceptBook(item.assignment.id)">
               <i class="pi pi-check"></i>
@@ -133,6 +144,7 @@
             </button>
           </div>
 
+          <!-- Accepted State Actions -->
           <div *ngIf="canReturnOrReport(item.assignment.status)" class="action-buttons">
             <button class="btn-return" (click)="openReturnModal(item.assignment.id)">
               <i class="pi pi-arrow-left"></i>
@@ -144,14 +156,17 @@
             </button>
           </div>
 
+          <!-- Declined State Actions -->
           <div *ngIf="item.assignment.status === 'declined'" class="action-buttons">
             <span class="status-text">Declined on {{ formatDate(item.assignment.parentResponse?.respondedAt) }}</span>
           </div>
 
+          <!-- Returned State Actions -->
           <div *ngIf="item.assignment.status === 'returned'" class="action-buttons">
             <span class="status-text">Returned on {{ formatDate(item.assignment.returnDate) }}</span>
           </div>
 
+          <!-- Lost State Actions -->
           <div *ngIf="item.assignment.status === 'lost'" class="action-buttons">
             <span class="status-text">Reported as lost</span>
           </div>
@@ -161,6 +176,7 @@
   </div>
 </div>
 
+<!-- Decline Modal -->
 <div *ngIf="showDeclineModal" class="modal-overlay" (click)="closeDeclineModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -169,6 +185,7 @@
         <i class="pi pi-times"></i>
       </button>
     </div>
+
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Reason for Declining *</label>
@@ -181,18 +198,28 @@
           <option value="other">Other Reason</option>
         </select>
       </div>
+
       <div class="form-group">
         <label class="form-label">Additional Notes (Optional)</label>
-        <textarea class="form-textarea" [(ngModel)]="declineNotes" placeholder="Please provide any additional details..." rows="4"></textarea>
+        <textarea 
+          class="form-textarea"
+          [(ngModel)]="declineNotes"
+          placeholder="Please provide any additional details..."
+          rows="4">
+        </textarea>
       </div>
     </div>
+
     <div class="modal-footer">
       <button class="btn-secondary" (click)="closeDeclineModal()">Cancel</button>
-      <button class="btn-decline" [disabled]="!declineReason" (click)="declineBook()">Confirm Decline</button>
+      <button class="btn-decline" [disabled]="!declineReason" (click)="declineBook()">
+        Confirm Decline
+      </button>
     </div>
   </div>
 </div>
 
+<!-- Return Modal -->
 <div *ngIf="showReturnModal" class="modal-overlay" (click)="closeReturnModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -201,16 +228,28 @@
         <i class="pi pi-times"></i>
       </button>
     </div>
+
     <div class="modal-body">
-      <p class="modal-text">Confirm that you are returning this book. Make sure the book is in good condition.</p>
+      <p class="modal-text">
+        Please confirm that you are returning this book. Make sure the book is in good condition.
+      </p>
+
       <div class="form-group">
         <label class="form-label">Notes (Optional)</label>
-        <textarea class="form-textarea" [(ngModel)]="returnNotes" placeholder="Add any comments about the book condition..." rows="3"></textarea>
+        <textarea 
+          class="form-textarea"
+          [(ngModel)]="returnNotes"
+          placeholder="Add any comments about the book condition..."
+          rows="3">
+        </textarea>
       </div>
     </div>
+
     <div class="modal-footer">
       <button class="btn-secondary" (click)="closeReturnModal()">Cancel</button>
-      <button class="btn-return" (click)="returnBook()">Confirm Return</button>
+      <button class="btn-return" (click)="returnBook()">
+        Confirm Return
+      </button>
     </div>
   </div>
 </div>
