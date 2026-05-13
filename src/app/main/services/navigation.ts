@@ -39,6 +39,12 @@ export class NavigationService {
       roles: [UserRole.DepartmentAdmin]
     },
     {
+      label: 'Book Packages',
+      icon: 'pi pi-send',
+      route: '/app/packages',
+      roles: [UserRole.DepartmentAdmin, UserRole.SchoolAdmin]
+    },
+    {
       label: 'Books',
       icon: 'pi pi-book',
       route: '/app/books',

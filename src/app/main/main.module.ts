@@ -60,6 +60,13 @@ import { IssueConfirmationComponent } from './pages/books/book-issue/issue-confi
 import { BookReturnComponent } from './pages/books/book-return';
 import { ReturnConfirmationComponent } from './pages/books/book-return/return-confirmation';
 
+// Pages - Book Packages
+import { BookPackagesComponent } from './pages/book-packages/book-packages.component';
+import { PackageFormComponent } from './pages/book-packages/package-form.component';
+import { PackageDetailComponent } from './pages/book-packages/package-detail.component';
+import { QRPrintComponent } from './pages/book-packages/qr-print.component';
+import { QRScanAcceptComponent } from './pages/book-packages/qr-scan-accept.component';
+
 const mainRoutes: Routes = [
   {
     path: '',
@@ -120,6 +127,14 @@ const mainRoutes: Routes = [
       // Reports (DepartmentAdmin, SchoolAdmin)
       { path: 'reports', component: ReportListComponent },
       { path: 'reports/:id', component: ReportViewComponent },
+
+      // Book Packages (Shipping)
+      { path: 'packages', component: BookPackagesComponent },
+      { path: 'packages/new', component: PackageFormComponent },
+      { path: 'packages/:id', component: PackageDetailComponent },
+      { path: 'packages/:id/edit', component: PackageFormComponent },
+      { path: 'packages/:id/qr-print', component: QRPrintComponent },
+      { path: 'packages/:id/scan-accept', component: QRScanAcceptComponent },
 
       // Default redirect
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
