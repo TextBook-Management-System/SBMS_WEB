@@ -55,6 +55,17 @@ import { ReportViewComponent } from './pages/reports/report-view/report-view';
 // Pages - AI Suggestions
 import { SuggestionDashboardComponent } from './pages/ai-suggestions/suggestion-dashboard/suggestion-dashboard';
 import { TransferPlanComponent } from './pages/ai-suggestions/transfer-plan/transfer-plan';
+import { BookIssueComponent } from './pages/books/book-issue';
+import { IssueConfirmationComponent } from './pages/books/book-issue/issue-confirmation';
+import { BookReturnComponent } from './pages/books/book-return';
+import { ReturnConfirmationComponent } from './pages/books/book-return/return-confirmation';
+
+// Pages - Book Packages
+import { BookPackagesComponent } from './pages/book-packages/book-packages.component';
+import { PackageFormComponent } from './pages/book-packages/package-form.component';
+import { PackageDetailComponent } from './pages/book-packages/package-detail.component';
+import { QRPrintComponent } from './pages/book-packages/qr-print.component';
+import { QRScanAcceptComponent } from './pages/book-packages/qr-scan-accept.component';
 
 const mainRoutes: Routes = [
   {
@@ -89,6 +100,10 @@ const mainRoutes: Routes = [
       { path: 'books/new', component: BookFormComponent },
       { path: 'books/:id/edit', component: BookFormComponent },
       { path: 'books/assign', component: BookAssignComponent },
+      { path: 'books/issue', component: BookIssueComponent },
+      { path: 'books/issue/confirm', component: IssueConfirmationComponent },
+      { path: 'books/return', component: BookReturnComponent },
+      { path: 'books/return/confirm', component: ReturnConfirmationComponent },
 
       // Learners (SchoolAdmin, Teacher)
       { path: 'learners', component: LearnerListComponent },
@@ -113,10 +128,18 @@ const mainRoutes: Routes = [
       { path: 'reports', component: ReportListComponent },
       { path: 'reports/:id', component: ReportViewComponent },
 
+      // Book Packages (Shipping)
+      { path: 'packages', component: BookPackagesComponent },
+      { path: 'packages/new', component: PackageFormComponent },
+      { path: 'packages/:id', component: PackageDetailComponent },
+      { path: 'packages/:id/edit', component: PackageFormComponent },
+      { path: 'packages/:id/qr-print', component: QRPrintComponent },
+      { path: 'packages/:id/scan-accept', component: QRScanAcceptComponent },
+
       // Default redirect
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
-    ]
-  }
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
+  },
 ];
 
 @NgModule({
@@ -148,14 +171,18 @@ const mainRoutes: Routes = [
     ReportListComponent,
     ReportViewComponent,
     SuggestionDashboardComponent,
-    TransferPlanComponent
+    TransferPlanComponent,
+    BookIssueComponent,
+    IssueConfirmationComponent,
+    BookReturnComponent,
+    ReturnConfirmationComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     RouterModule.forChild(mainRoutes),
-    ComponentsModule
-  ]
+    ComponentsModule,
+  ],
 })
-export class MainModule { }
+export class MainModule {}

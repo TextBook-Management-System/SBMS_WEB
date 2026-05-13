@@ -5,6 +5,8 @@ import { InputComponent } from './input/input.component';
 import { FormErrorComponent } from './form-error/form-error.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { PaginatorComponent } from './paginator/paginator.component';
+import { StepperComponent } from './stepper/stepper';
+import { FileUploadComponent } from './file-upload/file-upload';
 
 @NgModule({
   declarations: [
@@ -12,17 +14,19 @@ import { PaginatorComponent } from './paginator/paginator.component';
     InputComponent,
     FormErrorComponent,
     LoadingSpinnerComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    StepperComponent,
+    FileUploadComponent,
   ],
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   exports: [
     ButtonComponent,
     InputComponent,
     FormErrorComponent,
     LoadingSpinnerComponent,
-    PaginatorComponent
-  ]
+    PaginatorComponent,
+    StepperComponent,
+    FileUploadComponent,
+  ],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}

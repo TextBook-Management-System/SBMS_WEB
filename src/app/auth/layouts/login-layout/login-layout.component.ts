@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-login-layout',
@@ -23,7 +24,8 @@ export class LoginLayoutComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -46,7 +48,9 @@ export class LoginLayoutComponent implements OnInit, OnDestroy {
       this.authService.login(email, password, rememberMe)
         .pipe(
           finalize(() => {
-            this.isLoading = false;
+            this.isLoading = false; 
+            this.cdr.detectChanges();
+
           }),
           takeUntil(this.destroy$)
         )

@@ -1,0 +1,229 @@
+<div class="issue-wizard">
+  <div class="wizard-header">
+    <h2>Issue Book to Learner</h2>
+    <p class="subtitle">Follow the steps to allocate a book copy to a learner</p>
+  </div>
+
+  <app-stepper [steps]="steps" [currentStep]="currentStep"></app-stepper>
+
+  <!-- Step 1: Grade & Subject -->
+  <div class="step-content" *ngIf="currentStep === 0">
+    <div class="form-card">
+      <h3>Select Grade & Subject</h3>
+
+      <div class="form-group">
+        <label>Grade <span style="color:#ef4444">*</span></label>
+        <div *ngIf="gradesLoading" class="loading-inline">
+          <i class="pi pi-spin pi-spinner"></i> Loading grades...
+        </div>
+        <div class="grade-grid" *ngIf="!gradesLoading && grades.length > 0">
+          <button *ngFor="let grade of grades"
+                  type="button"
+                  class="grade-btn"
+                  [class.selected]="selectedGradeId === grade.id"
+                  (click)="selectedGradeId = grade.id">
+            {{ grade.name }}
+          </button>
+        </div>
+        <div *ngIf="!gradesLoading && grades.length === 0" class="empty-retry">
+          <p>Could not load grades</p>
+          <button type="button" class="btn btn-secondary" (click)="loadGrades()">
+            <i class="pi pi-refresh"></i> Retry
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="selectedGradeId">
+        <label for="subject">Subject <span style="color:#ef4444">*</span></label>
+        <select id="subject" [(ngModel)]="selectedSubjectId" class="form-select">
+          <option [ngValue]="null" disabled>Select a subject...</option>
+          <option *ngFor="let subject of subjects" [ngValue]="subject.id">{{ subject.name }}</option>
+        </select>
+      </div>
+
+      <div class="step-actions">
+        <span></span>
+        <button class="btn btn-primary" [disabled]="!selectedGradeId || !selectedSubjectId" (click)="onStep1Next()">
+          Next <i class="pi pi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Select Learner -->
+  <div class="step-content" *ngIf="currentStep === 1">
+    <div class="form-card">
+      <h3>Select Learner</h3>
+
+      <div class="form-group">
+        <input type="text" [(ngModel)]="learnerSearch" placeholder="Search learners..." class="form-input" />
+      </div>
+
+      <div class="learner-list">
+        <div *ngFor="let learner of filteredLearners"
+             class="learner-item"
+             [class.selected]="selectedLearnerId === learner.id"
+             (click)="selectLearner(learner.id)">
+          <div class="learner-avatar">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="learner-info">
+            <span class="learner-name">{{ learner.first_name }} {{ learner.last_name }}</span>
+          </div>
+          <i *ngIf="selectedLearnerId === learner.id" class="pi pi-check-circle selected-icon"></i>
+        </div>
+        <div *ngIf="filteredLearners.length === 0" class="empty-state">
+          No learners found for this grade
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-secondary" (click)="goBack()">
+          <i class="pi pi-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-primary" [disabled]="!selectedLearnerId" (click)="onStep2Next()">
+          Next <i class="pi pi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Find Book by QR -->
+  <div class="step-content" *ngIf="currentStep === 2">
+    <div class="form-card">
+      <h3>Find Book Copy</h3>
+      <p class="step-description">Enter the book's QR code to identify it</p>
+
+      <div class="form-group">
+        <label for="qrcode">QR Code / Book ID</label>
+        <div class="input-with-button">
+          <input type="text" id="qrcode" [(ngModel)]="qrCodeInput" placeholder="Scan or type QR code..." class="form-input" (keyup.enter)="searchBookByQr()" />
+          <button class="btn btn-primary btn-sm" (click)="searchBookByQr()" [disabled]="isLoading">
+            <i class="pi pi-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="bookCopyError" class="error-message">
+        <i class="pi pi-exclamation-circle"></i> {{ bookCopyError }}
+      </div>
+
+      <div *ngIf="bookCopy" class="book-found-card">
+        <div class="book-found-header">
+          <i class="pi pi-check-circle text-green-500"></i>
+          <span>Book Copy Found</span>
+        </div>
+        <div class="book-found-details">
+          <div class="detail-row"><span class="label">QR Code:</span><span>{{ bookCopy.qr_code }}</span></div>
+          <div class="detail-row"><span class="label">Condition:</span><span class="badge badge-{{ bookCopy.condition }}">{{ bookCopy.condition }}</span></div>
+          <div class="detail-row"><span class="label">Book ID:</span><span>{{ bookCopy.book_id }}</span></div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-secondary" (click)="goBack()">
+          <i class="pi pi-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-primary" [disabled]="!bookCopy" (click)="onStep3Next()">
+          Next <i class="pi pi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Capture Condition -->
+  <div class="step-content" *ngIf="currentStep === 3">
+    <div class="form-card">
+      <h3>Capture Book Condition</h3>
+      <p class="step-description">Upload a photo of the book's current condition</p>
+
+      <app-file-upload
+        label="Upload book condition photo"
+        accept="image/jpeg,image/png"
+        [maxSizeMb]="10"
+        (fileSelected)="onImageSelected($event)">
+      </app-file-upload>
+
+      <div class="step-actions">
+        <button class="btn btn-secondary" (click)="goBack()">
+          <i class="pi pi-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-primary" [disabled]="!conditionImage" (click)="onStep4Next()">
+          Analyze <i class="pi pi-bolt"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: AI Analysis -->
+  <div class="step-content" *ngIf="currentStep === 4">
+    <div class="form-card">
+      <h3>AI Condition Analysis</h3>
+
+      <div *ngIf="isAnalyzing" class="analyzing-state">
+        <div class="spinner-large"></div>
+        <p>Analyzing book condition...</p>
+      </div>
+
+      <div *ngIf="scanResult && !isAnalyzing" class="analysis-result">
+        <div class="result-card">
+          <div class="result-header">
+            <i class="pi pi-check-circle text-green-500"></i>
+            <span>Analysis Complete</span>
+          </div>
+          <div class="result-details">
+            <div class="detail-row">
+              <span class="label">Condition:</span>
+              <span class="badge badge-{{ scanResult.condition }}">{{ scanResult.condition }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Confidence:</span>
+              <span>{{ (scanResult.confidence_score * 100).toFixed(1) }}%</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Quality Score:</span>
+              <span class="quality-score">{{ scanResult.ai_quality_score || 'N/A' }}/100</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Issues -->
+        <div class="ai-section" *ngIf="getAiIssues().length > 0">
+          <h4><i class="pi pi-exclamation-triangle"></i> Issues Found</h4>
+          <ul class="ai-list issues-list">
+            <li *ngFor="let issue of getAiIssues()">{{ issue }}</li>
+          </ul>
+        </div>
+
+        <!-- AI Suggestions -->
+        <div class="ai-section" *ngIf="getAiSuggestions().length > 0">
+          <h4><i class="pi pi-lightbulb"></i> Suggestions</h4>
+          <ul class="ai-list suggestions-list">
+            <li *ngFor="let suggestion of getAiSuggestions()">{{ suggestion }}</li>
+          </ul>
+        </div>
+
+        <!-- Scan Image -->
+        <div class="scan-image-preview" *ngIf="scanResult.scan_image_path">
+          <img [src]="scanResult.scan_image_path" alt="Scan image" />
+        </div>
+
+        <div class="issue-summary">
+          <h4>Issue Summary</h4>
+          <div class="detail-row"><span class="label">Learner:</span><span>{{ getSelectedLearnerName() }}</span></div>
+          <div class="detail-row"><span class="label">Book QR:</span><span>{{ bookCopy?.qr_code }}</span></div>
+          <div class="detail-row"><span class="label">Condition:</span><span class="badge badge-{{ scanResult.condition }}">{{ scanResult.condition }}</span></div>
+        </div>
+
+        <div class="step-actions">
+          <button class="btn btn-secondary" (click)="goBack()">
+            <i class="pi pi-arrow-left"></i> Back
+          </button>
+          <button class="btn btn-primary" (click)="issueBook()" [disabled]="isLoading">
+            <i class="pi pi-check"></i> Confirm & Issue Book
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

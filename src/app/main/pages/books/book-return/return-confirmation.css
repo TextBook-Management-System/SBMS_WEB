@@ -1,0 +1,16 @@
+@reference "tailwindcss";
+
+.confirmation-page { max-width: 28rem; margin: 2rem auto; padding: 1.5rem; }
+.confirmation-card { background: #fff; border-radius: 0.75rem; border: 1px solid var(--color-border-light); padding: 2rem; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.success-icon { font-size: 3.5rem; color: var(--color-primary); margin-bottom: 1rem; }
+.confirmation-card h2 { font-size: 1.125rem; font-weight: 700; color: var(--color-navy); }
+.subtitle { font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 0.25rem; margin-bottom: 1.5rem; }
+.details { text-align: left; background: var(--color-surface); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.5rem; }
+.detail-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; margin-bottom: 0.25rem; }
+.detail-row .label { color: var(--color-text-secondary); min-width: 80px; }
+.actions { display: flex; gap: 0.75rem; justify-content: center; }
+.btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; transition: background-color 0.2s; cursor: pointer; }
+.btn-primary { background-color: var(--color-primary); color: #fff; }
+.btn-primary:hover { background-color: var(--color-primary-shade); }
+.btn-secondary { background-color: var(--color-surface); color: var(--color-navy); }
+.btn-secondary:hover { background-color: var(--color-border-light); }
