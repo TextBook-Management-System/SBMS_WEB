@@ -25,17 +25,14 @@
     <div class="section">
       <h3 class="section-title">1. Select Report Type</h3>
       <div class="type-grid">
-        <div class="type-card" *ngFor="let type of reportTypes"
-             [class.selected]="selectedType === type.id"
-             (click)="selectType(type.id)">
-          <div class="type-icon">
-            <i [class]="type.icon"></i>
-          </div>
+        <div class="type-card" *ngFor="let rt of reportTypes"
+             [class.selected]="selectedType === rt.type"
+             (click)="selectType(rt.type)">
           <div class="type-info">
-            <span class="type-title">{{ type.title }}</span>
-            <span class="type-desc">{{ type.description }}</span>
+            <span class="type-title">{{ formatLabel(rt.type) }}</span>
+            <span class="type-desc">{{ rt.description }}</span>
           </div>
-          <i class="pi pi-check-circle type-check" *ngIf="selectedType === type.id"></i>
+          <i class="pi pi-check-circle type-check" *ngIf="selectedType === rt.type"></i>
         </div>
       </div>
     </div>
@@ -44,25 +41,10 @@
     <div class="section" *ngIf="selectedType">
       <h3 class="section-title">2. Select Format</h3>
       <div class="format-options">
-        <label class="format-option" [class.selected]="selectedFormat === 'pdf'">
-          <input type="radio" name="format" value="pdf" [(ngModel)]="selectedFormat" />
-          <i class="pi pi-file-pdf"></i>
-          <span>PDF</span>
-        </label>
-        <label class="format-option" [class.selected]="selectedFormat === 'csv'">
-          <input type="radio" name="format" value="csv" [(ngModel)]="selectedFormat" />
-          <i class="pi pi-file"></i>
-          <span>CSV</span>
-        </label>
-        <label class="format-option" [class.selected]="selectedFormat === 'excel'">
-          <input type="radio" name="format" value="excel" [(ngModel)]="selectedFormat" />
-          <i class="pi pi-file-excel"></i>
-          <span>Excel</span>
-        </label>
-        <label class="format-option" [class.selected]="selectedFormat === 'json'">
-          <input type="radio" name="format" value="json" [(ngModel)]="selectedFormat" />
-          <i class="pi pi-code"></i>
-          <span>JSON</span>
+        <label class="format-option" *ngFor="let fmt of formats" [class.selected]="selectedFormat === fmt">
+          <input type="radio" name="format" [value]="fmt" [(ngModel)]="selectedFormat" />
+          <i [class]="getFormatIcon(fmt)"></i>
+          <span>{{ fmt | uppercase }}</span>
         </label>
       </div>
     </div>
@@ -72,9 +54,9 @@
       <div class="generate-bar">
         <div class="generate-info">
           <span class="generate-label">Ready to generate:</span>
-          <span class="generate-detail">{{ getSelectedTypeInfo()?.title }} ({{ selectedFormat | uppercase }})</span>
+          <span class="generate-detail">{{ formatLabel(selectedType) }} ({{ selectedFormat | uppercase }})</span>
         </div>
-        <button class="btn btn-primary" (click)="generateReport()" [disabled]="isGenerating">
+        <button class="btn btn-primary" (click)="generateReport()" [disabled]="isGenerating || !selectedFormat">
           <i class="pi" [class.pi-download]="!isGenerating" [class.pi-spin]="isGenerating" [class.pi-spinner]="isGenerating"></i>
           {{ isGenerating ? 'Generating...' : 'Generate & Download' }}
         </button>
@@ -91,11 +73,5 @@
         <button class="btn-link" (click)="generateReport()">Retry</button>
       </div>
     </div>
-  </div>
-
-  <!-- Empty -->
-  <div *ngIf="!isLoading && !loadError && reportTypes.length === 0" class="empty-state">
-    <i class="pi pi-chart-bar"></i>
-    <p>No report types available</p>
   </div>
 </div>

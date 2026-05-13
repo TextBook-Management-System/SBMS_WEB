@@ -12,7 +12,7 @@
       <i class="pi pi-sparkles"></i>
     </div>
     <h3>Generate AI Suggestions</h3>
-    <p>Click below to analyze your department's book distribution and get AI-powered recommendations for transfers between schools.</p>
+    <p>Analyze your department's book distribution and get AI-powered recommendations.</p>
     <button class="btn-generate" (click)="generateSuggestions()">
       <i class="pi pi-bolt"></i> Generate Suggestions
     </button>
@@ -38,25 +38,92 @@
 <!-- Results -->
 <div *ngIf="hasGenerated && suggestions && !isLoading" class="results-section">
   <div class="results-header">
-    <h3>AI Recommendations</h3>
+    <div>
+      <h3>{{ suggestions.department_name || 'Department Analysis' }}</h3>
+      <span class="results-meta">{{ suggestions.schools_analyzed }} schools analyzed <span *ngIf="suggestions.ai_powered" class="ai-badge"><i class="pi pi-sparkles"></i> AI Powered</span></span>
+    </div>
     <button class="btn-regenerate" (click)="generateSuggestions()">
       <i class="pi pi-refresh"></i> Regenerate
     </button>
   </div>
 
-  <!-- Display suggestions as JSON-rendered content -->
-  <div class="suggestion-content">
-    <!-- If suggestions is an array -->
-    <div *ngIf="isArray(suggestions)">
-      <div class="suggestion-card" *ngFor="let item of suggestions; let i = index">
-        <div class="suggestion-number">#{{ i + 1 }}</div>
-        <pre class="suggestion-data">{{ item | json }}</pre>
+  <!-- Summary -->
+  <div class="section-card summary-card">
+    <h4><i class="pi pi-info-circle"></i> Summary</h4>
+    <p>{{ suggestions.summary }}</p>
+  </div>
+
+  <!-- Risk Alerts -->
+  <div class="section-card risk-card" *ngIf="suggestions.risk_alerts?.length > 0">
+    <h4><i class="pi pi-exclamation-triangle"></i> Risk Alerts</h4>
+    <div class="alert-list">
+      <div class="alert-item" *ngFor="let alert of suggestions.risk_alerts">
+        <i class="pi pi-exclamation-circle"></i>
+        <span [innerHTML]="formatMarkdown(alert)"></span>
       </div>
     </div>
+  </div>
 
-    <!-- If suggestions is an object -->
-    <div *ngIf="!isArray(suggestions)">
-      <pre class="suggestion-data">{{ suggestions | json }}</pre>
+  <!-- Replacement Needed -->
+  <div class="section-card" *ngIf="suggestions.replacement_needed?.length > 0">
+    <h4><i class="pi pi-sync"></i> Replacements Needed</h4>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>School</th>
+            <th>Book</th>
+            <th>Qty</th>
+            <th>Urgency</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of suggestions.replacement_needed">
+            <td class="cell-name">{{ item.school }}</td>
+            <td>{{ item.book_title }}</td>
+            <td>{{ item.quantity }}</td>
+            <td><span class="urgency-badge" [ngClass]="item.urgency">{{ item.urgency }}</span></td>
+            <td class="cell-reason">{{ item.reason }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Procurement Priorities -->
+  <div class="section-card" *ngIf="suggestions.procurement_priorities?.length > 0">
+    <h4><i class="pi pi-shopping-cart"></i> Procurement Priorities</h4>
+    <div class="priority-list">
+      <div class="priority-item" *ngFor="let item of suggestions.procurement_priorities">
+        <div class="priority-header">
+          <span class="priority-subject">{{ item.subject }}</span>
+          <span class="urgency-badge" [ngClass]="item.priority">{{ item.priority }}</span>
+        </div>
+        <div class="priority-details">
+          <div class="detail-row"><span class="label">Grade:</span><span>{{ item.grade_level }}</span></div>
+          <div class="detail-row"><span class="label">Quantity:</span><span>{{ item.quantity_needed }}</span></div>
+        </div>
+        <p class="priority-reason">{{ item.reason }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- General Recommendations -->
+  <div class="section-card" *ngIf="suggestions.general_recommendations?.length > 0">
+    <h4><i class="pi pi-lightbulb"></i> Recommendations</h4>
+    <ul class="recommendations-list">
+      <li *ngFor="let rec of suggestions.general_recommendations" [innerHTML]="formatMarkdown(rec)"></li>
+    </ul>
+  </div>
+
+  <!-- Redistribution Suggestions -->
+  <div class="section-card" *ngIf="suggestions.redistribution_suggestions?.length > 0">
+    <h4><i class="pi pi-arrows-h"></i> Redistribution Suggestions</h4>
+    <div class="priority-list">
+      <div class="priority-item" *ngFor="let item of suggestions.redistribution_suggestions">
+        <pre class="suggestion-data">{{ item | json }}</pre>
+      </div>
     </div>
   </div>
 </div>

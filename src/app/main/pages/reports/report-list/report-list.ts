@@ -1,13 +1,14 @@
 import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
-import { HttpClient } from '@angular/common/http';
 
-interface ReportType {
-  id: string;
-  title: string;
+interface ReportTypeItem {
+  type: string;
   description: string;
-  icon: string;
-  category: string;
+}
+
+interface ReportTypesResponse {
+  report_types: ReportTypeItem[];
+  formats: string[];
 }
 
 @Component({
@@ -17,20 +18,20 @@ interface ReportType {
   styleUrls: ['./report-list.css']
 })
 export class ReportListComponent implements OnInit {
-  reportTypes: ReportType[] = [];
+  reportTypes: ReportTypeItem[] = [];
+  formats: string[] = [];
   isLoading = true;
   loadError: string | null = null;
 
   // Generation
   selectedType: string | null = null;
-  selectedFormat: string = 'pdf';
+  selectedFormat: string = '';
   isGenerating = false;
   generateError: string | null = null;
   generateSuccess: string | null = null;
 
   constructor(
     private readonly api: ApiService,
-    private readonly http: HttpClient,
     private readonly zone: NgZone,
     private readonly cdr: ChangeDetectorRef
   ) {}
@@ -43,17 +44,20 @@ export class ReportListComponent implements OnInit {
     this.isLoading = true;
     this.loadError = null;
 
-    this.api.get<ReportType[]>('/reports/types').subscribe({
-      next: (types) => {
+    this.api.get<ReportTypesResponse>('/reports/types').subscribe({
+      next: (res) => {
         this.zone.run(() => {
-          this.reportTypes = types || [];
+          this.reportTypes = res?.report_types || [];
+          this.formats = res?.formats || ['pdf', 'excel'];
+          if (this.formats.length > 0) {
+            this.selectedFormat = this.formats[0];
+          }
           this.isLoading = false;
           this.cdr.detectChanges();
         });
       },
       error: () => {
         this.zone.run(() => {
-          this.reportTypes = [];
           this.isLoading = false;
           this.loadError = 'Could not load report types';
           this.cdr.detectChanges();
@@ -62,18 +66,31 @@ export class ReportListComponent implements OnInit {
     });
   }
 
-  selectType(id: string): void {
-    this.selectedType = id;
+  selectType(type: string): void {
+    this.selectedType = type;
     this.generateError = null;
     this.generateSuccess = null;
   }
 
-  getSelectedTypeInfo(): ReportType | undefined {
-    return this.reportTypes.find(r => r.id === this.selectedType);
+  getSelectedTypeInfo(): ReportTypeItem | undefined {
+    return this.reportTypes.find(r => r.type === this.selectedType);
+  }
+
+  getFormatIcon(format: string): string {
+    switch (format) {
+      case 'pdf': return 'pi pi-file-pdf';
+      case 'excel': return 'pi pi-file-excel';
+      case 'csv': return 'pi pi-file';
+      default: return 'pi pi-file';
+    }
+  }
+
+  formatLabel(type: string): string {
+    return type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }
 
   generateReport(): void {
-    if (!this.selectedType) return;
+    if (!this.selectedType || !this.selectedFormat) return;
     this.isGenerating = true;
     this.generateError = null;
     this.generateSuccess = null;
@@ -86,15 +103,14 @@ export class ReportListComponent implements OnInit {
         this.zone.run(() => {
           this.isGenerating = false;
 
-          // If response has a download URL, trigger download
           if (response?.download_url) {
             this.downloadFile(response.download_url, `${this.selectedType}_report.${this.selectedFormat}`);
-            this.generateSuccess = 'Report generated successfully! Download started.';
+            this.generateSuccess = 'Report generated! Download started.';
           } else if (response?.file_url) {
             this.downloadFile(response.file_url, `${this.selectedType}_report.${this.selectedFormat}`);
             this.generateSuccess = 'Report generated! Download started.';
           } else {
-            // Response is the report data itself — download as JSON
+            // Response is data — download as file
             this.downloadJson(response, `${this.selectedType}_report.json`);
             this.generateSuccess = 'Report generated and downloaded.';
           }

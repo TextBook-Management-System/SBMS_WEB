@@ -54,4 +54,9 @@ export class SuggestionDashboardComponent implements OnInit {
   isArray(val: any): boolean {
     return Array.isArray(val);
   }
+
+  formatMarkdown(text: string): string {
+    // Convert **bold** to <strong>
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  }
 }
