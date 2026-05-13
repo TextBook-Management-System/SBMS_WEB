@@ -1,23 +1,54 @@
-import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  NgModule,
+  provideBrowserGlobalErrorListeners
+} from '@angular/core';
+
+import {
+  BrowserModule,
+  provideClientHydration,
+  withEventReplay
+} from '@angular/platform-browser';
+
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  HTTP_INTERCEPTORS
+} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing-module';
+
 import { App } from './app';
-import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
+
+import { AuthInterceptor }
+from './auth/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [App],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule],
+
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+
   providers: [
+
     provideBrowserGlobalErrorListeners(),
-    provideClientHydration(withEventReplay()),
+
+    provideClientHydration(
+      withEventReplay()
+    ),
+
+    provideHttpClient(
+      withInterceptorsFromDi()
+    ),
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true,
-    },
+      multi: true
+    }
   ],
-  bootstrap: [App],
+
+  bootstrap: [App]
 })
 export class AppModule {}

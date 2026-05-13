@@ -1,174 +1,127 @@
-<div class="parent-books-container">
-  <!-- Page Header -->
+<div class="parent-books-page">
   <div class="page-header">
-    <div class="header-left">
-      <h2 class="page-title">Children's Books</h2>
-      <p class="page-desc">Manage books assigned to your children</p>
+    <div>
+      <h1 class="page-title">My Children's Books</h1>
+      <p class="page-desc">View and acknowledge book allocations for your children</p>
     </div>
   </div>
 
-  <!-- Stats Cards -->
-  <div class="stats-grid">
-    <div class="stat-card" [class.active]="selectedFilter === 'all'" (click)="selectedFilter = 'all'">
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-state">
+    <i class="pi pi-spin pi-spinner"></i> Loading...
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="loadError && !isLoading" class="error-state">
+    <i class="pi pi-exclamation-circle"></i>
+    <p>{{ loadError }}</p>
+    <button class="btn btn-secondary" (click)="loadData()"><i class="pi pi-refresh"></i> Retry</button>
+  </div>
+
+  <!-- STEP 1: Children List -->
+  <div *ngIf="!isLoading && !loadError && !selectedChild">
+    <h3 class="section-title">Select a Child</h3>
+
+    <div *ngIf="children.length === 0" class="empty-state">
+      <i class="pi pi-users"></i>
+      <p>No children linked to your account</p>
+    </div>
+
+    <div class="children-grid" *ngIf="children.length > 0">
+      <div class="child-card" *ngFor="let child of children" (click)="selectChild(child)">
+        <div class="child-avatar">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="child-info">
+          <span class="child-name">{{ child.first_name }} {{ child.last_name }}</span>
+          <span class="child-meta">{{ child.grade_name }} · {{ child.school_name }}</span>
+          <span class="child-books">{{ child.allocations.length }} book(s)</span>
+        </div>
+        <i class="pi pi-chevron-right child-arrow"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Selected Child's Books -->
+  <div *ngIf="!isLoading && !loadError && selectedChild">
+    <div class="child-header">
+      <button class="btn btn-back" (click)="backToChildren()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button>
+      <div class="child-header-info">
+        <h3 class="section-title">{{ selectedChild.first_name }} {{ selectedChild.last_name }}</h3>
+        <span class="child-meta">{{ selectedChild.grade_name }} · {{ selectedChild.school_name }}</span>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+      <button class="tab" [class.active]="selectedTab === 'all'" (click)="selectedTab = 'all'">
+        All ({{ getTabCount('all') }})
+      </button>
+      <button class="tab" [class.active]="selectedTab === 'active'" (click)="selectedTab = 'active'">
+        <i class="pi pi-book"></i> Active ({{ getTabCount('active') }})
+      </button>
+      <button class="tab" [class.active]="selectedTab === 'returned'" (click)="selectedTab = 'returned'">
+        <i class="pi pi-arrow-left"></i> Returned ({{ getTabCount('returned') }})
+      </button>
+      <button class="tab" [class.active]="selectedTab === 'pending'" (click)="selectedTab = 'pending'">
+        <i class="pi pi-clock"></i> Pending ({{ getTabCount('pending') }})
+      </button>
+      <button class="tab" [class.active]="selectedTab === 'rejected'" (click)="selectedTab = 'rejected'">
+        <i class="pi pi-times-circle"></i> Rejected ({{ getTabCount('rejected') }})
+      </button>
+    </div>
+
+    <!-- No allocations -->
+    <div *ngIf="filteredAllocations.length === 0" class="empty-state">
       <i class="pi pi-book"></i>
-      <div class="stat-info">
-        <span class="stat-value">{{ assignments.length }}</span>
-        <span class="stat-label">Total Books</span>
-      </div>
-    </div>
-    <div class="stat-card" [class.active]="selectedFilter === 'pending'" (click)="selectedFilter = 'pending'">
-      <i class="pi pi-clock"></i>
-      <div class="stat-info">
-        <span class="stat-value">{{ getPendingCount() }}</span>
-        <span class="stat-label">Pending</span>
-      </div>
-    </div>
-    <div class="stat-card" [class.active]="selectedFilter === 'accepted'" (click)="selectedFilter = 'accepted'">
-      <i class="pi pi-check-circle"></i>
-      <div class="stat-info">
-        <span class="stat-value">{{ getAcceptedCount() }}</span>
-        <span class="stat-label">Accepted</span>
-      </div>
-    </div>
-    <div class="stat-card" [class.active]="selectedFilter === 'declined'" (click)="selectedFilter = 'declined'">
-      <i class="pi pi-times-circle"></i>
-      <div class="stat-info">
-        <span class="stat-value">{{ getDeclinedCount() }}</span>
-        <span class="stat-label">Declined</span>
-      </div>
-    </div>
-    <div class="stat-card" [class.active]="selectedFilter === 'returned'" (click)="selectedFilter = 'returned'">
-      <i class="pi pi-arrow-left"></i>
-      <div class="stat-info">
-        <span class="stat-value">{{ getReturnedCount() }}</span>
-        <span class="stat-label">Returned</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Books List -->
-  <div class="books-section">
-    <div *ngIf="isLoading" class="loading-state">
-      <i class="pi pi-spin pi-spinner"></i>
-      <p>Loading books...</p>
+      <p>No books found for this filter</p>
     </div>
 
-    <div *ngIf="!isLoading && getFilteredAssignments().length === 0" class="empty-state">
-      <i class="pi pi-inbox"></i>
-      <p>No books {{ selectedFilter !== 'all' ? 'in this category' : 'assigned yet' }}</p>
-    </div>
-
-    <div *ngIf="!isLoading && getFilteredAssignments().length > 0" class="books-list">
-      <div class="book-card" *ngFor="let item of getFilteredAssignments()">
-        <!-- Book Header -->
-        <div class="card-header">
-          <div class="header-top">
-            <h3 class="book-title">{{ item.book?.title }}</h3>
-            <span class="status-badge" [ngClass]="getStatusBadgeClass(item.assignment.status)">
-              <i [class]="'pi ' + getStatusIcon(item.assignment.status)"></i>
-              {{ item.assignment.status | uppercase }}
-            </span>
+    <!-- Allocation cards -->
+    <div class="alloc-list" *ngIf="filteredAllocations.length > 0">
+      <div class="alloc-card" [class.returned]="alloc.status === 'returned'" *ngFor="let alloc of filteredAllocations">
+        <div class="alloc-status-badge">
+          <span class="status-pill" [ngClass]="alloc.status">{{ alloc.status }}</span>
+        </div>
+        <div class="alloc-body">
+          <div class="alloc-details">
+            <span class="book-title">{{ alloc.book_copy.book_title }}</span>
+            <div class="detail-row"><span class="label">ISBN:</span><span>{{ alloc.book_copy.book_isbn }}</span></div>
+            <div class="detail-row"><span class="label">QR Code:</span><span>{{ alloc.book_copy.qr_code }}</span></div>
+            <div class="detail-row"><span class="label">Condition:</span><span class="badge-condition" [ngClass]="alloc.book_copy.condition">{{ alloc.book_copy.condition }}</span></div>
+            <div class="detail-row"><span class="label">Issued:</span><span>{{ formatDate(alloc.allocation_date) }}</span></div>
+            <div class="detail-row" *ngIf="alloc.return_date"><span class="label">Returned:</span><span>{{ formatDate(alloc.return_date) }}</span></div>
+            <div class="detail-row" *ngIf="alloc.ai_condition"><span class="label">AI Condition:</span><span class="badge-condition" [ngClass]="alloc.ai_condition">{{ alloc.ai_condition }}</span></div>
+            <div class="detail-row" *ngIf="alloc.ai_quality_score"><span class="label">Quality:</span><span>{{ alloc.ai_quality_score }}/100</span></div>
           </div>
-          <div class="learner-info">
-            <i class="pi pi-user"></i>
-            <span>{{ item.learner?.firstName }} {{ item.learner?.lastName }}</span>
+          <div class="alloc-image" *ngIf="alloc.scan_image_url">
+            <img [src]="alloc.scan_image_url" alt="Book scan" />
           </div>
         </div>
 
-        <!-- Book Details -->
-        <div class="card-content">
-          <div class="details-grid">
-            <div class="detail-item">
-              <span class="detail-label">Author</span>
-              <span class="detail-value">{{ item.book?.author }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">ISBN</span>
-              <span class="detail-value">{{ item.book?.isbn }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Subject</span>
-              <span class="detail-value">{{ item.book?.subjectId }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Grade</span>
-              <span class="detail-value">{{ item.book?.gradeId }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Assigned Date</span>
-              <span class="detail-value">{{ formatDate(item.assignment.assignedDate) }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Book Condition</span>
-              <span class="condition-badge" [ngClass]="'condition-' + item.book?.condition">
-                {{ item.book?.condition }}
-              </span>
-            </div>
+        <!-- Acknowledgement actions -->
+        <div class="ack-section" *ngIf="isPendingAction(alloc)">
+          <div class="ack-pending-banner">
+            <i class="pi pi-clock"></i> Awaiting your acknowledgement
           </div>
-
-          <!-- Decline Reason Display -->
-          <div *ngIf="item.assignment.status === 'declined' && item.assignment.parentResponse?.declineReason" 
-               class="decline-info">
-            <i class="pi pi-info-circle"></i>
-            <div>
-              <span class="label">Decline Reason:</span>
-              <span>{{ getDeclineReasonLabel(item.assignment.parentResponse?.declineReason || '') }}</span>
-              <p *ngIf="item.assignment.parentResponse?.notes" class="notes">
-                {{ item.assignment.parentResponse?.notes }}
-              </p>
-            </div>
-          </div>
-
-          <!-- Parent Notes Display -->
-          <div *ngIf="item.assignment.parentResponse?.notes && item.assignment.status !== 'declined'" 
-               class="notes-info">
-            <i class="pi pi-comment"></i>
-            <div>
-              <span class="label">Notes:</span>
-              <p>{{ item.assignment.parentResponse?.notes }}</p>
-            </div>
+          <div class="ack-actions">
+            <button class="btn btn-accept" (click)="acceptAcknowledgement(alloc.id)">
+              <i class="pi pi-check"></i> Accept
+            </button>
+            <button class="btn btn-reject" (click)="openRejectModal(alloc.id)">
+              <i class="pi pi-times"></i> Reject
+            </button>
           </div>
         </div>
 
-        <!-- Card Actions -->
-        <div class="card-actions">
-          <!-- Pending State Actions -->
-          <div *ngIf="item.assignment.status === 'pending'" class="action-buttons">
-            <button class="btn-accept" (click)="acceptBook(item.assignment.id)">
-              <i class="pi pi-check"></i>
-              <span>Accept</span>
-            </button>
-            <button class="btn-decline" (click)="openDeclineModal(item.assignment.id)">
-              <i class="pi pi-times"></i>
-              <span>Decline</span>
-            </button>
+        <div *ngIf="!isPendingAction(alloc) && getLatestAck(alloc) as latestAck">
+          <div *ngIf="latestAck.status === 'accepted'" class="ack-accepted-banner">
+            <i class="pi pi-check-circle"></i> Accepted on {{ formatDate(latestAck.created_at) }}
           </div>
-
-          <!-- Accepted State Actions -->
-          <div *ngIf="canReturnOrReport(item.assignment.status)" class="action-buttons">
-            <button class="btn-return" (click)="openReturnModal(item.assignment.id)">
-              <i class="pi pi-arrow-left"></i>
-              <span>Return Book</span>
-            </button>
-            <button class="btn-lost" (click)="reportLost(item.assignment.id)">
-              <i class="pi pi-exclamation-triangle"></i>
-              <span>Report Lost</span>
-            </button>
-          </div>
-
-          <!-- Declined State Actions -->
-          <div *ngIf="item.assignment.status === 'declined'" class="action-buttons">
-            <span class="status-text">Declined on {{ formatDate(item.assignment.parentResponse?.respondedAt) }}</span>
-          </div>
-
-          <!-- Returned State Actions -->
-          <div *ngIf="item.assignment.status === 'returned'" class="action-buttons">
-            <span class="status-text">Returned on {{ formatDate(item.assignment.returnDate) }}</span>
-          </div>
-
-          <!-- Lost State Actions -->
-          <div *ngIf="item.assignment.status === 'lost'" class="action-buttons">
-            <span class="status-text">Reported as lost</span>
+          <div *ngIf="latestAck.status === 'rejected'" class="ack-rejected-banner">
+            <i class="pi pi-times-circle"></i> Rejected: {{ latestAck.reason }}
           </div>
         </div>
       </div>
@@ -176,79 +129,22 @@
   </div>
 </div>
 
-<!-- Decline Modal -->
-<div *ngIf="showDeclineModal" class="modal-overlay" (click)="closeDeclineModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h3>Decline Book</h3>
-      <button class="close-btn" (click)="closeDeclineModal()">
-        <i class="pi pi-times"></i>
-      </button>
+<!-- Reject Modal -->
+<div class="modal-overlay" *ngIf="showRejectModal" (click)="closeRejectModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <h3>Reject Book Allocation</h3>
+    <p class="modal-desc">Please provide a reason for rejecting this book allocation.</p>
+
+    <div class="form-group">
+      <label for="reason">Reason <span style="color:#ef4444">*</span></label>
+      <textarea id="reason" [(ngModel)]="rejectReason" rows="3" class="form-textarea" placeholder="Why are you rejecting this allocation?"></textarea>
     </div>
 
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">Reason for Declining *</label>
-        <select class="form-select" [(ngModel)]="declineReason">
-          <option value="">Select a reason...</option>
-          <option value="duplicate">Already Have Duplicate Copy</option>
-          <option value="damaged">Book Appears Damaged</option>
-          <option value="irrelevant">Not Relevant for Child</option>
-          <option value="accessibility">Accessibility Concerns</option>
-          <option value="other">Other Reason</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Additional Notes (Optional)</label>
-        <textarea 
-          class="form-textarea"
-          [(ngModel)]="declineNotes"
-          placeholder="Please provide any additional details..."
-          rows="4">
-        </textarea>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeDeclineModal()">Cancel</button>
-      <button class="btn-decline" [disabled]="!declineReason" (click)="declineBook()">
-        Confirm Decline
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Return Modal -->
-<div *ngIf="showReturnModal" class="modal-overlay" (click)="closeReturnModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h3>Return Book</h3>
-      <button class="close-btn" (click)="closeReturnModal()">
-        <i class="pi pi-times"></i>
-      </button>
-    </div>
-
-    <div class="modal-body">
-      <p class="modal-text">
-        Please confirm that you are returning this book. Make sure the book is in good condition.
-      </p>
-
-      <div class="form-group">
-        <label class="form-label">Notes (Optional)</label>
-        <textarea 
-          class="form-textarea"
-          [(ngModel)]="returnNotes"
-          placeholder="Add any comments about the book condition..."
-          rows="3">
-        </textarea>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeReturnModal()">Cancel</button>
-      <button class="btn-return" (click)="returnBook()">
-        Confirm Return
+    <div class="modal-actions">
+      <button class="btn btn-secondary" (click)="closeRejectModal()">Cancel</button>
+      <button class="btn btn-reject" [disabled]="!rejectReason.trim() || isSubmitting" (click)="submitReject()">
+        <i class="pi" [class.pi-times]="!isSubmitting" [class.pi-spin]="isSubmitting" [class.pi-spinner]="isSubmitting"></i>
+        {{ isSubmitting ? 'Submitting...' : 'Reject' }}
       </button>
     </div>
   </div>
