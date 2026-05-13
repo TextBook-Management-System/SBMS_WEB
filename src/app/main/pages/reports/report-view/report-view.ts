@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ReportService, GeneratedReport } from '../../../services/report';
+import { ReportService } from '../../../services/report';
 
 @Component({
   selector: 'app-report-view',
@@ -9,30 +9,50 @@ import { ReportService, GeneratedReport } from '../../../services/report';
   styleUrls: ['./report-view.css']
 })
 export class ReportViewComponent implements OnInit {
-  report: GeneratedReport | undefined;
+  report: any = null;
+  isLoading = true;
+  loadError: string | null = null;
+  reportType: string = '';
 
   constructor(
     private readonly reportService: ReportService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly zone: NgZone,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.reportService.generateReport(id).subscribe(report => {
-        this.report = report;
-      });
+    this.reportType = this.route.snapshot.paramMap.get('id') || '';
+    if (this.reportType) {
+      this.generateReport();
     }
+  }
+
+  generateReport(): void {
+    this.isLoading = true;
+    this.loadError = null;
+
+    this.reportService.generateReport(this.reportType).subscribe({
+      next: (data) => {
+        this.zone.run(() => {
+          this.report = data;
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        });
+      },
+      error: () => {
+        this.zone.run(() => {
+          this.isLoading = false;
+          this.loadError = 'Could not generate report';
+          this.cdr.detectChanges();
+        });
+      }
+    });
   }
 
   exportPdf(): void {
     window.print();
-  }
-
-  exportCsv(): void {
-    // Placeholder for CSV export
-    alert('CSV export coming soon');
   }
 
   goBack(): void {

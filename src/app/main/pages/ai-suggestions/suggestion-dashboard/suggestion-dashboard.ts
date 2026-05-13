@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { AiSuggestionService } from '../../../services/ai-suggestion';
-import { TransferSuggestion, SchoolBookSummary } from '../../../models/transfer-suggestion.model';
+import { AuthService } from '../../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-suggestion-dashboard',
@@ -10,51 +9,49 @@ import { TransferSuggestion, SchoolBookSummary } from '../../../models/transfer-
   styleUrls: ['./suggestion-dashboard.css']
 })
 export class SuggestionDashboardComponent implements OnInit {
-  suggestions: TransferSuggestion[] = [];
-  summaries: SchoolBookSummary[] = [];
-  isLoading = true;
-
-  get surplusCount(): number {
-    return this.summaries.filter(s => s.status === 'surplus').length;
-  }
-
-  get deficitCount(): number {
-    return this.summaries.filter(s => s.status === 'deficit').length;
-  }
-
-  get pendingCount(): number {
-    return this.suggestions.filter(s => s.status === 'pending').length;
-  }
+  suggestions: any = null;
+  isLoading = false;
+  loadError: string | null = null;
+  hasGenerated = false;
+  departmentId: number | null = null;
 
   constructor(
     private readonly aiService: AiSuggestionService,
-    private readonly router: Router
+    private readonly authService: AuthService,
+    private readonly zone: NgZone,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadData();
+    const user = this.authService.getCurrentUser();
+    this.departmentId = user?.department_id || 1; // Default to 1 if not set
   }
 
-  loadData(): void {
+  generateSuggestions(): void {
+    if (!this.departmentId) return;
     this.isLoading = true;
-    this.aiService.getSuggestions().subscribe(suggestions => {
-      this.suggestions = suggestions;
-      this.isLoading = false;
+    this.loadError = null;
+
+    this.aiService.getDepartmentSuggestions(this.departmentId).subscribe({
+      next: (data) => {
+        this.zone.run(() => {
+          this.suggestions = data;
+          this.isLoading = false;
+          this.hasGenerated = true;
+          this.cdr.detectChanges();
+        });
+      },
+      error: () => {
+        this.zone.run(() => {
+          this.isLoading = false;
+          this.loadError = 'Failed to generate AI suggestions. Please try again.';
+          this.cdr.detectChanges();
+        });
+      }
     });
-    this.aiService.getSchoolSummaries().subscribe(summaries => {
-      this.summaries = summaries;
-    });
   }
 
-  viewTransferPlan(id: string): void {
-    this.router.navigate(['/app/ai-suggestions/transfer', id]);
-  }
-
-  acceptSuggestion(id: string): void {
-    this.aiService.acceptSuggestion(id).subscribe(() => this.loadData());
-  }
-
-  rejectSuggestion(id: string): void {
-    this.aiService.rejectSuggestion(id).subscribe(() => this.loadData());
+  isArray(val: any): boolean {
+    return Array.isArray(val);
   }
 }

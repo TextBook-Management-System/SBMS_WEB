@@ -97,46 +97,47 @@ import { BookPackage } from '../../models/book-package.model';
     </div>
   `,
   styles: [`
-    .qr-scan-container { padding: 1.5rem; max-width: 56rem; margin: 0 auto; }
-    .scan-header { margin-bottom: 2rem; }
-    .scan-header h2 { font-size: 1.5rem; font-weight: bold; color: #1f2937; }
-    .scan-header p { color: #6b7280; margin-top: 0.25rem; }
-    .btn-back { padding: 0.5rem; color: #6b7280; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-back:hover { background-color: #f3f4f6; }
+    .qr-scan-container { padding: 1rem 1.5rem; }
+    .scan-header { margin-bottom: 1.5rem; }
+    .scan-header h2 { font-size: 1.25rem; font-weight: 700; color: var(--color-navy); }
+    .scan-header p { font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 2px; }
+    .btn-back { padding: 0.5rem; color: var(--color-text-secondary); border-radius: 0.375rem; }
+    .btn-back:hover { background: var(--color-surface); }
 
-    .scan-section { margin-bottom: 2rem; padding: 1.5rem; background-color: white; border-radius: 0.5rem; border: 1px solid #e5e7eb; }
-    .scan-input { margin-bottom: 1rem; }
-    .scan-input label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem; }
-    .form-control { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; margin-bottom: 0.75rem; }
-    .btn-primary { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #2563eb; color: white; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-primary:hover { background-color: #1d4ed8; }
+    .scan-section { margin-bottom: 1.5rem; padding: 1.25rem; background: #fff; border-radius: 0.75rem; border: 1px solid var(--color-border-light); }
+    .scan-input { margin-bottom: 0.75rem; }
+    .scan-input label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--color-navy); margin-bottom: 0.25rem; }
+    .form-control { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border-light); border-radius: 0.5rem; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .form-control:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1); }
+    .btn-primary { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; background: var(--color-primary); color: #fff; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; }
+    .btn-primary:hover { background: var(--color-primary-shade); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-secondary { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #d1d5db; color: #1f2937; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-secondary:hover { background-color: #9ca3af; }
+    .btn-secondary { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; background: var(--color-surface); color: var(--color-navy); border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; }
+    .btn-secondary:hover { background: var(--color-border-light); }
 
-    .camera-scan { margin-top: 1rem; }
+    .camera-scan { margin-top: 0.75rem; }
 
-    .package-preview { padding: 1.5rem; background-color: white; border-radius: 0.5rem; border: 1px solid #e5e7eb; }
-    .package-preview h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
-    .preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-    .preview-item label { font-weight: 500; color: #374151; }
-    .preview-item p { color: #6b7280; margin-top: 0.25rem; }
+    .package-preview { padding: 1.25rem; background: #fff; border-radius: 0.75rem; border: 1px solid var(--color-border-light); }
+    .package-preview h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-navy); }
+    .preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+    .preview-item label { font-size: 0.8rem; font-weight: 500; color: var(--color-navy); }
+    .preview-item p { font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
 
-    .books-list { margin-top: 1.5rem; }
-    .books-list h4 { font-weight: 600; margin-bottom: 0.75rem; }
-    table { width: 100%; }
-    thead { background-color: #f3f4f6; }
-    th { padding: 0.5rem 1rem; text-align: left; font-size: 0.875rem; font-weight: 600; }
-    td { padding: 0.5rem 1rem; border-bottom: 1px solid #e5e7eb; }
+    .books-list { margin-top: 1rem; }
+    .books-list h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-navy); }
+    table { width: 100%; font-size: 0.8rem; }
+    thead { background: var(--color-navy); }
+    th { padding: 0.5rem 1rem; text-align: left; font-size: 0.7rem; font-weight: 600; color: #fff; text-transform: uppercase; }
+    td { padding: 0.5rem 1rem; border-bottom: 1px solid var(--color-border-light); }
 
-    .accept-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
-    .btn-success { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #16a34a; color: white; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-success:hover { background-color: #15803d; }
+    .accept-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    .btn-success { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; background: var(--color-primary); color: #fff; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; }
+    .btn-success:hover { background: var(--color-primary-shade); }
 
     .success-message { text-align: center; padding: 3rem 0; }
-    .success-message i { font-size: 3rem; color: #16a34a; margin-bottom: 1rem; display: block; }
-    .success-message h3 { font-size: 1.25rem; font-weight: bold; color: #1f2937; margin-bottom: 0.5rem; }
-    .success-message p { color: #6b7280; margin-bottom: 1.5rem; }
+    .success-message i { font-size: 3rem; color: var(--color-primary); margin-bottom: 0.75rem; display: block; }
+    .success-message h3 { font-size: 1.125rem; font-weight: 700; color: var(--color-navy); margin-bottom: 0.25rem; }
+    .success-message p { font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 1rem; }
   `]
 })
 export class QRScanAcceptComponent implements OnInit {

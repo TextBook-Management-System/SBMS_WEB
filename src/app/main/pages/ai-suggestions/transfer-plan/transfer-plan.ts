@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AiSuggestionService } from '../../../services/ai-suggestion';
-import { TransferSuggestion } from '../../../models/transfer-suggestion.model';
 
 @Component({
   selector: 'app-transfer-plan',
@@ -10,37 +9,45 @@ import { TransferSuggestion } from '../../../models/transfer-suggestion.model';
   styleUrls: ['./transfer-plan.css']
 })
 export class TransferPlanComponent implements OnInit {
-  suggestion: TransferSuggestion | undefined;
+  suggestion: any = null;
+  isLoading = true;
 
   constructor(
     private readonly aiService: AiSuggestionService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly zone: NgZone,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.aiService.getSuggestionById(id).subscribe(suggestion => {
-        this.suggestion = suggestion;
+      // Load all suggestions and find by index/id
+      this.aiService.getDistributionSuggestions().subscribe({
+        next: (suggestions) => {
+          this.zone.run(() => {
+            this.suggestion = suggestions.find((s: any) => s.id == id) || suggestions[Number(id)] || null;
+            this.isLoading = false;
+            this.cdr.detectChanges();
+          });
+        },
+        error: () => {
+          this.zone.run(() => {
+            this.isLoading = false;
+            this.cdr.detectChanges();
+          });
+        }
       });
     }
   }
 
   acceptPlan(): void {
-    if (this.suggestion) {
-      this.aiService.acceptSuggestion(this.suggestion.id).subscribe(updated => {
-        this.suggestion = updated;
-      });
-    }
+    // Placeholder
   }
 
   rejectPlan(): void {
-    if (this.suggestion) {
-      this.aiService.rejectSuggestion(this.suggestion.id).subscribe(updated => {
-        this.suggestion = updated;
-      });
-    }
+    // Placeholder
   }
 
   goBack(): void {

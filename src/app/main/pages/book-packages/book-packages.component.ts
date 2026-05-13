@@ -103,44 +103,48 @@ import { BookPackage } from '../../models/book-package.model';
     </div>
   `,
   styles: [`
-    .packages-container { padding: 1.5rem; }
-    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .packages-container { padding: 1rem 1.5rem; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
     .header-left { flex: 1; }
-    .page-title { font-size: 1.875rem; font-weight: bold; color: #1f2937; }
-    .page-desc { color: #6b7280; margin-top: 0.25rem; }
-    .btn-primary { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #2563eb; color: white; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-primary:hover { background-color: #1d4ed8; }
+    .page-title { font-size: 1.25rem; font-weight: 700; color: var(--color-navy); }
+    .page-desc { font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 2px; }
+    .btn-primary { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1rem; background-color: var(--color-primary); color: white; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; transition: background-color 0.2s; }
+    .btn-primary:hover { background-color: var(--color-primary-shade); }
     
-    .tabs-section { margin-bottom: 1.5rem; }
-    .tab-buttons { display: flex; gap: 0.5rem; border-bottom: 1px solid #e5e7eb; }
-    .tab-btn { padding: 0.75rem 1rem; border-bottom: 2px solid transparent; color: #6b7280; transition: color 0.2s; }
-    .tab-btn:hover { color: #374151; }
-    .tab-btn.active { border-bottom: 2px solid #2563eb; color: #2563eb; }
+    .tabs-section { margin-bottom: 1rem; }
+    .tab-buttons { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--color-border-light); }
+    .tab-btn { padding: 0.5rem 0.75rem; border-bottom: 2px solid transparent; color: var(--color-text-secondary); font-size: 0.8rem; font-weight: 500; transition: color 0.2s; }
+    .tab-btn:hover { color: var(--color-navy); }
+    .tab-btn.active { border-bottom-color: var(--color-primary); color: var(--color-primary); }
     
-    .filters-section { margin-bottom: 1.5rem; padding: 1rem; background-color: #f9fafb; border-radius: 0.5rem; }
-    .filter-group { display: flex; align-items: center; gap: 0.75rem; }
-    .filter-select { padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; }
+    .filters-section { margin-bottom: 1rem; padding: 0.75rem; background-color: var(--color-surface); border-radius: 0.5rem; }
+    .filter-group { display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; }
+    .filter-select { padding: 0.4rem 0.75rem; border: 1px solid var(--color-border-light); border-radius: 0.5rem; font-size: 0.8rem; }
     
-    .packages-table { overflow-x: auto; }
-    table { width: 100%; }
-    thead { background-color: #f3f4f6; }
-    th { padding: 0.75rem 1rem; text-align: left; font-size: 0.875rem; font-weight: 600; color: #374151; }
-    td { padding: 0.75rem 1rem; border-bottom: 1px solid #e5e7eb; }
+    .packages-table { overflow-x: auto; background: #fff; border-radius: 0.75rem; border: 1px solid var(--color-border-light); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    table { width: 100%; font-size: 0.8rem; border-collapse: collapse; }
+    thead { background-color: var(--color-navy); }
+    th { padding: 0.625rem 1rem; text-align: left; font-size: 0.7rem; font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { padding: 0.5rem 1rem; color: #334155; border-bottom: 1px solid var(--color-border-light); }
+    tbody tr:hover { background-color: var(--color-surface); }
     
-    .status-badge { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
-    .status-packaging { background-color: #f3f4f6; color: #1f2937; }
-    .status-ready_to_ship { background-color: #dbeafe; color: #1e40af; }
-    .status-shipped { background-color: #fed7aa; color: #9a3412; }
-    .status-in_transit { background-color: #fef3c7; color: #92400e; }
-    .status-received { background-color: #dcfce7; color: #166534; }
-    .status-declined { background-color: #fee2e2; color: #991b1b; }
+    .package-number { font-weight: 500; color: var(--color-navy); }
+    .books-count { font-weight: 600; }
     
-    .actions-cell { display: flex; gap: 0.5rem; }
-    .btn-icon { padding: 0.5rem; border-radius: 0.5rem; color: #6b7280; transition: background-color 0.2s; }
-    .btn-icon:hover { background-color: #f3f4f6; }
+    .status-badge { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 500; }
+    .status-packaging { background: #f3f4f6; color: #1f2937; }
+    .status-ready_to_ship { background: var(--color-badge-new); color: #1e40af; }
+    .status-shipped { background: var(--color-badge-fair); color: #92400e; }
+    .status-in_transit { background: var(--color-badge-fair); color: #92400e; }
+    .status-received { background: var(--color-badge-good); color: #166534; }
+    .status-declined { background: var(--color-badge-damaged); color: #991b1b; }
     
-    .empty-state { text-align: center; padding: 3rem 0; color: #6b7280; }
-    .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; }
+    .actions-cell { display: flex; gap: 0.25rem; }
+    .btn-icon { width: 2rem; height: 2rem; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; color: #6b7280; transition: background-color 0.15s; }
+    .btn-icon:hover { background-color: var(--color-surface); }
+    
+    .empty-state { text-align: center; padding: 3rem 0; color: var(--color-text-secondary); }
+    .empty-state i { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
   `]
 })
 export class BookPackagesComponent implements OnInit {

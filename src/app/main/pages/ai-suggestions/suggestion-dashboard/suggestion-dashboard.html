@@ -1,80 +1,62 @@
 <div class="page-header">
   <div class="header-left">
     <h2 class="page-title">AI Suggestions</h2>
-    <p class="page-desc">AI-powered book transfer recommendations</p>
+    <p class="page-desc">AI-powered book distribution recommendations for your department</p>
   </div>
 </div>
 
-<!-- Summary Cards -->
-<div class="summary-grid">
-  <div class="summary-card surplus">
-    <i class="pi pi-arrow-up"></i>
-    <div class="summary-info">
-      <span class="summary-value">{{ surplusCount }}</span>
-      <span class="summary-label">Schools with Surplus</span>
+<!-- Generate Button (before generating) -->
+<div *ngIf="!hasGenerated && !isLoading && !loadError" class="generate-section">
+  <div class="generate-card">
+    <div class="generate-icon">
+      <i class="pi pi-sparkles"></i>
     </div>
-  </div>
-  <div class="summary-card deficit">
-    <i class="pi pi-arrow-down"></i>
-    <div class="summary-info">
-      <span class="summary-value">{{ deficitCount }}</span>
-      <span class="summary-label">Schools with Deficit</span>
-    </div>
-  </div>
-  <div class="summary-card pending">
-    <i class="pi pi-clock"></i>
-    <div class="summary-info">
-      <span class="summary-value">{{ pendingCount }}</span>
-      <span class="summary-label">Pending Transfers</span>
-    </div>
+    <h3>Generate AI Suggestions</h3>
+    <p>Click below to analyze your department's book distribution and get AI-powered recommendations for transfers between schools.</p>
+    <button class="btn-generate" (click)="generateSuggestions()">
+      <i class="pi pi-bolt"></i> Generate Suggestions
+    </button>
   </div>
 </div>
 
-<!-- Suggestions Table -->
-<div class="table-container">
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th>Destination School</th>
-        <th>Books Needed</th>
-        <th>Sources</th>
-        <th>Confidence</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let suggestion of suggestions">
-        <td class="cell-name">{{ suggestion.destinationSchoolName }}</td>
-        <td>{{ suggestion.totalNeeded }}</td>
-        <td>{{ suggestion.sources.length }} school(s)</td>
-        <td>
-          <div class="confidence-bar">
-            <div class="confidence-fill" [style.width.%]="suggestion.confidence" [class.high]="suggestion.confidence >= 80" [class.medium]="suggestion.confidence >= 60 && suggestion.confidence < 80" [class.low]="suggestion.confidence < 60"></div>
-            <span class="confidence-text">{{ suggestion.confidence }}%</span>
-          </div>
-        </td>
-        <td>
-          <span class="badge-status" [ngClass]="'status-' + suggestion.status">{{ suggestion.status }}</span>
-        </td>
-        <td class="cell-actions">
-          <button class="action-btn view" (click)="viewTransferPlan(suggestion.id)" title="View Plan">
-            <i class="pi pi-eye"></i>
-          </button>
-          <button class="action-btn approve" *ngIf="suggestion.status === 'pending'" (click)="acceptSuggestion(suggestion.id)" title="Accept">
-            <i class="pi pi-check"></i>
-          </button>
-          <button class="action-btn reject" *ngIf="suggestion.status === 'pending'" (click)="rejectSuggestion(suggestion.id)" title="Reject">
-            <i class="pi pi-times"></i>
-          </button>
-        </td>
-      </tr>
-      <tr *ngIf="suggestions.length === 0 && !isLoading">
-        <td colspan="6" class="empty-state">
-          <i class="pi pi-sparkles"></i>
-          <p>No suggestions available</p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<!-- Loading -->
+<div *ngIf="isLoading" class="loading-state">
+  <div class="spinner-large"></div>
+  <p>Generating AI suggestions...</p>
+  <p class="hint">This may take a moment while the AI analyzes distribution data</p>
+</div>
+
+<!-- Error -->
+<div *ngIf="loadError && !isLoading" class="error-state">
+  <i class="pi pi-exclamation-circle"></i>
+  <p>{{ loadError }}</p>
+  <button class="btn-retry" (click)="generateSuggestions()">
+    <i class="pi pi-refresh"></i> Retry
+  </button>
+</div>
+
+<!-- Results -->
+<div *ngIf="hasGenerated && suggestions && !isLoading" class="results-section">
+  <div class="results-header">
+    <h3>AI Recommendations</h3>
+    <button class="btn-regenerate" (click)="generateSuggestions()">
+      <i class="pi pi-refresh"></i> Regenerate
+    </button>
+  </div>
+
+  <!-- Display suggestions as JSON-rendered content -->
+  <div class="suggestion-content">
+    <!-- If suggestions is an array -->
+    <div *ngIf="isArray(suggestions)">
+      <div class="suggestion-card" *ngFor="let item of suggestions; let i = index">
+        <div class="suggestion-number">#{{ i + 1 }}</div>
+        <pre class="suggestion-data">{{ item | json }}</pre>
+      </div>
+    </div>
+
+    <!-- If suggestions is an object -->
+    <div *ngIf="!isArray(suggestions)">
+      <pre class="suggestion-data">{{ suggestions | json }}</pre>
+    </div>
+  </div>
 </div>

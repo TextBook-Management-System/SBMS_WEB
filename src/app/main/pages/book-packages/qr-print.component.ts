@@ -50,27 +50,22 @@ import { BookPackage } from '../../models/book-package.model';
     </div>
   `,
   styles: [`
-    .qr-print-container { padding: 1.5rem; max-width: 42rem; margin: 0 auto; }
-    .print-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding: 1rem; background-color: white; border-radius: 0.5rem; border: 1px solid #e5e7eb; }
-    .print-header h2 { font-size: 1.25rem; font-weight: bold; color: #1f2937; }
-    .btn-close { padding: 0.5rem; color: #6b7280; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-close:hover { background-color: #f3f4f6; }
-    .btn-print { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #2563eb; color: white; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-print:hover { background-color: #1d4ed8; }
+    .qr-print-container { padding: 1rem 1.5rem; }
+    .print-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding: 0.75rem; background: #fff; border-radius: 0.75rem; border: 1px solid var(--color-border-light); }
+    .print-header h2 { font-size: 1rem; font-weight: 600; color: var(--color-navy); }
+    .btn-close { padding: 0.5rem; color: var(--color-text-secondary); border-radius: 0.375rem; }
+    .btn-close:hover { background: var(--color-surface); }
+    .btn-print { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; background: var(--color-primary); color: #fff; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; }
+    .btn-print:hover { background: var(--color-primary-shade); }
     
-    .print-content { }
-    .qr-label { margin-bottom: 1rem; padding: 1rem; border: 2px dashed #d1d5db; display: flex; align-items: center; justify-content: center; }
+    .qr-label { margin-bottom: 0.75rem; padding: 1rem; border: 2px dashed var(--color-border-light); display: flex; align-items: center; justify-content: center; border-radius: 0.5rem; }
     .label-content { display: flex; gap: 1rem; align-items: center; width: 100%; }
-    .qr-code { flex-shrink: 0; }
-    .qr-code img { width: 8rem; height: 8rem; }
+    .qr-code img { width: 6rem; height: 6rem; }
     .label-info { flex: 1; }
-    .label-info h3 { font-size: 1.125rem; font-weight: bold; color: #1f2937; }
-    .label-info p { font-size: 0.875rem; color: #374151; margin-top: 0.25rem; }
+    .label-info h3 { font-size: 1rem; font-weight: 600; color: var(--color-navy); }
+    .label-info p { font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
     
-    @media print {
-      .print-header { display: none; }
-      .page-break { page-break-after: always; }
-    }
+    @media print { .print-header { display: none; } }
   `]
 })
 export class QRPrintComponent implements OnInit {

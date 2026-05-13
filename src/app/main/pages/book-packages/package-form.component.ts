@@ -161,56 +161,56 @@ import { BookPackage, BookPackageItem, BookCondition, BookPackageStatus } from '
     </div>
   `,
   styles: [`
-    .package-form-container { padding: 1.5rem; max-width: 56rem; margin: 0 auto; }
-    .form-header { margin-bottom: 2rem; }
-    .form-header h2 { font-size: 1.5rem; font-weight: bold; color: #1f2937; }
-    .form-header p { color: #6b7280; margin-top: 0.25rem; }
+    .package-form-container { padding: 1rem 1.5rem; }
+    .form-header { margin-bottom: 1.5rem; }
+    .form-header h2 { font-size: 1.25rem; font-weight: 700; color: var(--color-navy); }
+    .form-header p { font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 2px; }
     
-    .steps-indicator { display: flex; justify-content: space-between; margin-bottom: 2rem; }
+    .steps-indicator { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
     .step { display: flex; flex-direction: column; align-items: center; }
-    .step span { width: 2.5rem; height: 2.5rem; border-radius: 50%; background-color: #d1d5db; color: #1f2937; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .step.active span { background-color: #2563eb; color: white; }
-    .step.completed span { background-color: #16a34a; color: white; }
-    .step p { font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem; }
+    .step span { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--color-border-light); color: var(--color-navy); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem; }
+    .step.active span { background: var(--color-primary); color: #fff; }
+    .step.completed span { background: var(--color-primary); color: #fff; }
+    .step p { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.4rem; }
     
-    .form-step { background-color: white; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #e5e7eb; }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem; }
-    .form-control { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; }
-    .form-control:focus { outline: none; border-color: #3b82f6; }
+    .form-step { background: #fff; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border-light); }
+    .form-group { margin-bottom: 0.75rem; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--color-navy); margin-bottom: 0.25rem; }
+    .form-control { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border-light); border-radius: 0.5rem; font-size: 0.85rem; }
+    .form-control:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1); }
     
     .mt-2 { margin-top: 0.5rem; }
     .mt-4 { margin-top: 1rem; }
     
-    .books-table { margin-top: 1.5rem; overflow-x: auto; }
-    table { width: 100%; }
-    th { padding: 0.5rem 1rem; text-align: left; font-size: 0.875rem; font-weight: 600; background-color: #f3f4f6; }
-    td { padding: 0.5rem 1rem; border-bottom: 1px solid #e5e7eb; }
+    .books-table { margin-top: 1rem; overflow-x: auto; }
+    table { width: 100%; font-size: 0.8rem; }
+    th { padding: 0.5rem 1rem; text-align: left; font-size: 0.7rem; font-weight: 600; background: var(--color-navy); color: #fff; text-transform: uppercase; }
+    td { padding: 0.5rem 1rem; border-bottom: 1px solid var(--color-border-light); }
     
-    .total-books { margin-top: 1rem; font-size: 1.125rem; font-weight: 600; color: #1f2937; }
-    .empty-message { text-align: center; padding: 2rem 0; color: #6b7280; }
+    .total-books { margin-top: 0.75rem; font-size: 0.9rem; font-weight: 600; color: var(--color-navy); }
+    .empty-message { text-align: center; padding: 2rem 0; color: var(--color-text-secondary); font-size: 0.85rem; }
     
     .qr-section { text-align: center; }
-    .qr-section h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
-    .qr-preview { margin-top: 1.5rem; display: flex; flex-direction: column; align-items: center; }
-    .qr-preview img { width: 12rem; height: 12rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; }
-    .qr-preview p { margin-top: 0.5rem; font-size: 0.875rem; color: #6b7280; }
+    .qr-section h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-navy); }
+    .qr-preview { margin-top: 1rem; display: flex; flex-direction: column; align-items: center; }
+    .qr-preview img { width: 10rem; height: 10rem; border: 2px solid var(--color-border-light); border-radius: 0.5rem; }
+    .qr-preview p { margin-top: 0.5rem; font-size: 0.8rem; color: var(--color-text-secondary); }
     
     .summary { margin: 0.75rem 0; }
-    .summary h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
-    .summary-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb; }
-    .summary-item label { font-weight: 500; color: #374151; }
+    .summary h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-navy); }
+    .summary-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-light); font-size: 0.85rem; }
+    .summary-item label { font-weight: 500; color: var(--color-navy); }
     
-    .form-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
-    .btn-primary { padding: 0.5rem 1rem; background-color: #2563eb; color: white; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-primary:hover { background-color: #1d4ed8; }
+    .form-actions { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+    .btn-primary { padding: 0.5rem 1rem; background: var(--color-primary); color: #fff; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; }
+    .btn-primary:hover { background: var(--color-primary-shade); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-secondary { padding: 0.5rem 1rem; background-color: #d1d5db; color: #1f2937; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-secondary:hover { background-color: #9ca3af; }
-    .btn-success { padding: 0.5rem 1rem; background-color: #16a34a; color: white; border-radius: 0.5rem; transition: background-color 0.2s; }
-    .btn-success:hover { background-color: #15803d; }
-    .btn-danger-small { padding: 0.25rem 0.5rem; font-size: 0.875rem; background-color: #dc2626; color: white; border-radius: 0.25rem; transition: background-color 0.2s; }
-    .btn-danger-small:hover { background-color: #b91c1c; }
+    .btn-secondary { padding: 0.5rem 1rem; background: var(--color-surface); color: var(--color-navy); border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; }
+    .btn-secondary:hover { background: var(--color-border-light); }
+    .btn-success { padding: 0.5rem 1rem; background: var(--color-primary); color: #fff; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; }
+    .btn-success:hover { background: var(--color-primary-shade); }
+    .btn-danger-small { padding: 0.2rem 0.5rem; font-size: 0.75rem; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 0.25rem; }
+    .btn-danger-small:hover { background: #fee2e2; }
   `]
 })
 export class PackageFormComponent implements OnInit {
