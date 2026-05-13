@@ -1,0 +1,30 @@
+@reference "tailwindcss";
+
+.file-upload-container { width: 100%; }
+
+.upload-area {
+  display: block; width: 100%; border: 2px dashed var(--color-border-light); border-radius: 0.75rem;
+  padding: 1.5rem; cursor: pointer; transition: border-color 0.2s, background-color 0.2s;
+}
+.upload-area:hover { border-color: var(--color-primary); background-color: rgba(22, 163, 74, 0.03); }
+.upload-area.has-file { border-style: solid; border-color: var(--color-primary); padding: 0; overflow: hidden; }
+
+.hidden-input { display: none; }
+
+.upload-placeholder { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); }
+.upload-icon { font-size: 2rem; color: var(--color-border-light); }
+.upload-text { font-size: 0.85rem; font-weight: 500; }
+.upload-hint { font-size: 0.75rem; color: var(--color-text-secondary); }
+
+.preview-container { position: relative; width: 100%; aspect-ratio: 16/9; }
+.preview-image { width: 100%; height: 100%; object-fit: cover; }
+.preview-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; color: #fff; opacity: 0; transition: opacity 0.2s;
+}
+.preview-overlay:hover { opacity: 1; }
+.preview-overlay i { font-size: 1.5rem; margin-bottom: 0.25rem; }
+.preview-overlay span { font-size: 0.8rem; }
+
+.file-name { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.8rem; color: var(--color-navy); }
+.upload-error { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.8rem; color: #ef4444; }

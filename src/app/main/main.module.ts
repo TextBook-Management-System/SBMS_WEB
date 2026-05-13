@@ -55,6 +55,10 @@ import { ReportViewComponent } from './pages/reports/report-view/report-view';
 // Pages - AI Suggestions
 import { SuggestionDashboardComponent } from './pages/ai-suggestions/suggestion-dashboard/suggestion-dashboard';
 import { TransferPlanComponent } from './pages/ai-suggestions/transfer-plan/transfer-plan';
+import { BookIssueComponent } from './pages/books/book-issue';
+import { IssueConfirmationComponent } from './pages/books/book-issue/issue-confirmation';
+import { BookReturnComponent } from './pages/books/book-return';
+import { ReturnConfirmationComponent } from './pages/books/book-return/return-confirmation';
 
 const mainRoutes: Routes = [
   {
@@ -89,6 +93,10 @@ const mainRoutes: Routes = [
       { path: 'books/new', component: BookFormComponent },
       { path: 'books/:id/edit', component: BookFormComponent },
       { path: 'books/assign', component: BookAssignComponent },
+      { path: 'books/issue', component: BookIssueComponent },
+      { path: 'books/issue/confirm', component: IssueConfirmationComponent },
+      { path: 'books/return', component: BookReturnComponent },
+      { path: 'books/return/confirm', component: ReturnConfirmationComponent },
 
       // Learners (SchoolAdmin, Teacher)
       { path: 'learners', component: LearnerListComponent },
@@ -114,9 +122,9 @@ const mainRoutes: Routes = [
       { path: 'reports/:id', component: ReportViewComponent },
 
       // Default redirect
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
-    ]
-  }
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
+  },
 ];
 
 @NgModule({
@@ -148,14 +156,18 @@ const mainRoutes: Routes = [
     ReportListComponent,
     ReportViewComponent,
     SuggestionDashboardComponent,
-    TransferPlanComponent
+    TransferPlanComponent,
+    BookIssueComponent,
+    IssueConfirmationComponent,
+    BookReturnComponent,
+    ReturnConfirmationComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     RouterModule.forChild(mainRoutes),
-    ComponentsModule
-  ]
+    ComponentsModule,
+  ],
 })
-export class MainModule { }
+export class MainModule {}

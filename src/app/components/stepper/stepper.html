@@ -1,0 +1,12 @@
+<div class="stepper">
+  <div class="stepper-track">
+    <div *ngFor="let step of steps; let i = index" class="step-item" [class.active]="i === currentStep" [class.completed]="i < currentStep">
+      <div class="step-circle">
+        <i *ngIf="i < currentStep" class="pi pi-check"></i>
+        <span *ngIf="i >= currentStep">{{ i + 1 }}</span>
+      </div>
+      <span class="step-label">{{ step.label }}</span>
+      <div class="step-connector" *ngIf="i < steps.length - 1"></div>
+    </div>
+  </div>
+</div>

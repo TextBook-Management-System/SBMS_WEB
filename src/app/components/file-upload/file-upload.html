@@ -1,0 +1,29 @@
+<div class="file-upload-container">
+  <label class="upload-area" [class.has-file]="previewUrl">
+    <input type="file" [accept]="accept" (change)="onFileChange($event)" class="hidden-input" />
+
+    <div *ngIf="!previewUrl" class="upload-placeholder">
+      <i class="pi pi-cloud-upload upload-icon"></i>
+      <span class="upload-text">{{ label }}</span>
+      <span class="upload-hint">JPEG or PNG, max {{ maxSizeMb }}MB</span>
+    </div>
+
+    <div *ngIf="previewUrl" class="preview-container">
+      <img [src]="previewUrl" alt="Preview" class="preview-image" />
+      <div class="preview-overlay">
+        <i class="pi pi-camera"></i>
+        <span>Change image</span>
+      </div>
+    </div>
+  </label>
+
+  <div *ngIf="fileName" class="file-name">
+    <i class="pi pi-file"></i>
+    <span>{{ fileName }}</span>
+  </div>
+
+  <div *ngIf="error" class="upload-error">
+    <i class="pi pi-exclamation-circle"></i>
+    <span>{{ error }}</span>
+  </div>
+</div>

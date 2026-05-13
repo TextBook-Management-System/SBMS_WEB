@@ -1,0 +1,24 @@
+<div class="confirmation-page">
+  <div class="confirmation-card">
+    <div class="success-icon">
+      <i class="pi pi-check-circle"></i>
+    </div>
+    <h2>Book Returned Successfully</h2>
+    <p class="subtitle">The book has been returned and condition updated</p>
+
+    <div class="details">
+      <div class="detail-row"><span class="label">Book QR:</span><span>{{ bookQr }}</span></div>
+      <div class="detail-row"><span class="label">Previous:</span><span>{{ previousCondition }}</span></div>
+      <div class="detail-row"><span class="label">Current:</span><span>{{ condition }}</span></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" (click)="goToBooks()">
+        <i class="pi pi-book"></i> View Books
+      </button>
+      <button class="btn btn-primary" (click)="returnAnother()">
+        <i class="pi pi-refresh"></i> Return Another
+      </button>
+    </div>
+  </div>
+</div>

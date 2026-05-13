@@ -1,0 +1,141 @@
+<div class="return-wizard">
+  <div class="wizard-header">
+    <h2>Return Book</h2>
+    <p class="subtitle">Process a book return and assess its condition</p>
+  </div>
+
+  <app-stepper [steps]="steps" [currentStep]="currentStep"></app-stepper>
+
+  <!-- Step 1: Scan Book -->
+  <div class="step-content" *ngIf="currentStep === 0">
+    <div class="form-card">
+      <h3>Identify Book</h3>
+      <p class="step-description">Enter the book's QR code to find the active allocation</p>
+
+      <div class="form-group">
+        <label for="qrcode">QR Code / Book ID</label>
+        <div class="input-with-button">
+          <input type="text" id="qrcode" [(ngModel)]="qrCodeInput" placeholder="Scan or type QR code..." class="form-input" (keyup.enter)="searchBookByQr()" />
+          <button class="btn btn-primary btn-sm" (click)="searchBookByQr()" [disabled]="isLoading">
+            <i class="pi pi-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="bookCopyError" class="error-message">
+        <i class="pi pi-exclamation-circle"></i> {{ bookCopyError }}
+      </div>
+
+      <div *ngIf="bookCopy && activeAllocation" class="book-found-card">
+        <div class="book-found-header">
+          <i class="pi pi-check-circle text-green-500"></i>
+          <span>Book & Allocation Found</span>
+        </div>
+        <div class="book-found-details">
+          <div class="detail-row"><span class="label">QR Code:</span><span>{{ bookCopy.qr_code }}</span></div>
+          <div class="detail-row"><span class="label">Current Condition:</span><span class="badge badge-{{ bookCopy.condition }}">{{ bookCopy.condition }}</span></div>
+          <div class="detail-row"><span class="label">Issued On:</span><span>{{ activeAllocation.allocation_date | date:'mediumDate' }}</span></div>
+          <div class="detail-row"><span class="label">Learner ID:</span><span>{{ activeAllocation.learner_id }}</span></div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <span></span>
+        <button class="btn btn-primary" [disabled]="!bookCopy || !activeAllocation" (click)="onStep1Next()">
+          Next <i class="pi pi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Capture Condition -->
+  <div class="step-content" *ngIf="currentStep === 1">
+    <div class="form-card">
+      <h3>Capture Return Condition</h3>
+      <p class="step-description">Upload a photo of the book's current condition for AI assessment</p>
+
+      <app-file-upload
+        label="Upload book condition photo"
+        accept="image/jpeg,image/png"
+        [maxSizeMb]="10"
+        (fileSelected)="onImageSelected($event)">
+      </app-file-upload>
+
+      <div class="step-actions">
+        <button class="btn btn-secondary" (click)="goBack()">
+          <i class="pi pi-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-primary" [disabled]="!conditionImage" (click)="onStep2Next()">
+          Analyze <i class="pi pi-bolt"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: AI Analysis & Confirm -->
+  <div class="step-content" *ngIf="currentStep === 2">
+    <div class="form-card">
+      <h3>Condition Analysis & Return</h3>
+
+      <div *ngIf="isAnalyzing" class="analyzing-state">
+        <div class="spinner-large"></div>
+        <p>Analyzing book condition...</p>
+      </div>
+
+      <div *ngIf="scanResult && !isAnalyzing" class="analysis-result">
+        <div class="condition-comparison">
+          <div class="condition-box">
+            <span class="condition-label">Issue Condition</span>
+            <span class="badge badge-{{ bookCopy?.condition }}">{{ bookCopy?.condition }}</span>
+          </div>
+          <i class="pi pi-arrow-right comparison-arrow"></i>
+          <div class="condition-box">
+            <span class="condition-label">Return Condition</span>
+            <span class="badge badge-{{ scanResult.condition }}">{{ scanResult.condition }}</span>
+          </div>
+        </div>
+
+        <div class="result-details">
+          <div class="detail-row">
+            <span class="label">AI Confidence:</span>
+            <span>{{ (scanResult.confidence_score * 100).toFixed(1) }}%</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Quality Score:</span>
+            <span>{{ scanResult.ai_quality_score || 'N/A' }}/100</span>
+          </div>
+        </div>
+
+        <!-- AI Issues -->
+        <div class="ai-section" *ngIf="getAiIssues().length > 0">
+          <h4><i class="pi pi-exclamation-triangle"></i> Issues Found</h4>
+          <ul class="ai-list issues-list">
+            <li *ngFor="let issue of getAiIssues()">{{ issue }}</li>
+          </ul>
+        </div>
+
+        <!-- AI Suggestions -->
+        <div class="ai-section" *ngIf="getAiSuggestions().length > 0">
+          <h4><i class="pi pi-lightbulb"></i> Suggestions</h4>
+          <ul class="ai-list suggestions-list">
+            <li *ngFor="let suggestion of getAiSuggestions()">{{ suggestion }}</li>
+          </ul>
+        </div>
+
+        <!-- Scan Image -->
+        <div class="scan-image-preview" *ngIf="scanResult.scan_image_path">
+          <img [src]="scanResult.scan_image_path" alt="Scan image" />
+        </div>
+
+        <div class="step-actions">
+          <button class="btn btn-secondary" (click)="goBack()">
+            <i class="pi pi-arrow-left"></i> Back
+          </button>
+          <button class="btn btn-primary" (click)="returnBook()" [disabled]="isLoading">
+            <i class="pi pi-check"></i> Confirm Return
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -15,6 +15,7 @@ export class AuthService {
   private readonly API_URL = `${this.BASE_URL}/auth`;
   private readonly ACCESS_TOKEN_KEY = 'access_token';
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
+  private readonly USER_KEY = 'current_user';
   private readonly isBrowser: boolean;
 
   private readonly currentUserSubject = new BehaviorSubject<UserWithRoles | null>(null);
@@ -31,11 +32,6 @@ export class AuthService {
     this.initializeAuth();
   }
 
-  /**
-   * POST /api/v1/auth/login
-   * Authenticate user with email and password.
-   * After storing tokens, fetches the current user profile via /auth/me.
-   */
   login(email: string, password: string, rememberMe: boolean = false): Observable<TokenResponse> {
     const request: LoginRequest = { email, password };
 
@@ -46,11 +42,8 @@ export class AuthService {
       }),
       switchMap(response => {
         return this.http.get<UserWithRoles>(`${this.API_URL}/me`).pipe(
-          tap(user => this.currentUserSubject.next(user)),
-          catchError(() => {
-            console.warn('Could not fetch user profile after login');
-            return of(null);
-          }),
+          tap(user => this.setCurrentUser(user)),
+          catchError(() => of(null)),
           switchMap(() => of(response))
         );
       }),
@@ -58,21 +51,12 @@ export class AuthService {
     );
   }
 
-  /**
-   * POST /api/v1/auth/register
-   * Register a new user account.
-   * Returns the user profile (excluding password hash) with HTTP 201.
-   */
   register(request: RegisterRequest): Observable<User> {
     return this.http.post<User>(`${this.API_URL}/register`, request).pipe(
       catchError(error => this.handleAuthError(error))
     );
   }
 
-  /**
-   * POST /api/v1/auth/refresh
-   * Exchange a valid refresh token for a new access token.
-   */
   refreshToken(): Observable<AccessTokenResponse> {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
@@ -82,9 +66,7 @@ export class AuthService {
     const request: RefreshTokenRequest = { refresh_token: refreshToken };
 
     return this.http.post<AccessTokenResponse>(`${this.API_URL}/refresh`, request).pipe(
-      tap(response => {
-        this.storeAccessToken(response.access_token);
-      }),
+      tap(response => this.storeAccessToken(response.access_token)),
       catchError(error => {
         this.logout();
         return throwError(() => error);
@@ -92,10 +74,6 @@ export class AuthService {
     );
   }
 
-  /**
-   * POST /api/v1/auth/logout
-   * Invalidate the current access token on the server.
-   */
   logoutFromServer(): Observable<any> {
     return this.http.post(`${this.API_URL}/logout`, {}).pipe(
       tap(() => this.clearSession()),
@@ -106,9 +84,6 @@ export class AuthService {
     );
   }
 
-  /**
-   * Clear local session (tokens + state) without calling the server.
-   */
   logout(): void {
     this.clearSession();
   }
@@ -138,22 +113,40 @@ export class AuthService {
   }
 
   /**
-   * Fetch the current user profile via GET /api/v1/auth/me
+   * Fetch user from /auth/me and cache locally.
    */
   loadCurrentUser(): void {
     if (!this.getAccessToken()) return;
 
     this.http.get<UserWithRoles>(`${this.API_URL}/me`).subscribe({
-      next: (user) => this.currentUserSubject.next(user),
-      error: () => {
-        console.warn('Could not fetch user profile');
+      next: (user) => this.setCurrentUser(user),
+      error: (err) => {
+        if (err?.status === 401) {
+          this.clearSession();
+        }
       }
     });
   }
 
+  private setCurrentUser(user: UserWithRoles): void {
+    this.currentUserSubject.next(user);
+    // Cache in localStorage for instant restore on refresh
+    if (this.isBrowser) {
+      localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    }
+  }
+
+  private getCachedUser(): UserWithRoles | null {
+    if (!this.isBrowser) return null;
+    const cached = localStorage.getItem(this.USER_KEY);
+    if (cached) {
+      try { return JSON.parse(cached); } catch { return null; }
+    }
+    return null;
+  }
+
   private storeTokens(response: TokenResponse, rememberMe: boolean): void {
     if (!this.isBrowser) return;
-
     const storage = rememberMe ? localStorage : sessionStorage;
     storage.setItem(this.ACCESS_TOKEN_KEY, response.access_token);
     storage.setItem(this.REFRESH_TOKEN_KEY, response.refresh_token);
@@ -161,7 +154,6 @@ export class AuthService {
 
   private storeAccessToken(token: string): void {
     if (!this.isBrowser) return;
-
     if (localStorage.getItem(this.ACCESS_TOKEN_KEY)) {
       localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
     } else {
@@ -173,6 +165,7 @@ export class AuthService {
     if (this.isBrowser) {
       localStorage.removeItem(this.ACCESS_TOKEN_KEY);
       localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+      localStorage.removeItem(this.USER_KEY);
       sessionStorage.removeItem(this.ACCESS_TOKEN_KEY);
       sessionStorage.removeItem(this.REFRESH_TOKEN_KEY);
     }
@@ -186,7 +179,6 @@ export class AuthService {
 
   private handleAuthError(error: any): Observable<never> {
     let errorMessage = 'An error occurred. Please try again later.';
-
     const status = error?.status || 0;
 
     if (status === 401) {
@@ -208,7 +200,6 @@ export class AuthService {
       errorMessage = 'An error occurred. Please try again later.';
     }
 
-    console.error('Authentication error:', { status, error });
     return throwError(() => ({ status, message: errorMessage }));
   }
 
@@ -218,6 +209,14 @@ export class AuthService {
     const token = this.getAccessToken();
     if (token) {
       this.isAuthenticatedSubject.next(true);
+
+      // Instantly restore cached user (no network wait)
+      const cachedUser = this.getCachedUser();
+      if (cachedUser) {
+        this.currentUserSubject.next(cachedUser);
+      }
+
+      // Refresh in background (updates cache if user data changed)
       this.loadCurrentUser();
     }
   }
