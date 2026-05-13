@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { StepConfig } from '../../../components/stepper/stepper';
 import { BookCopyService } from '../../services/book-copy';
@@ -6,7 +6,7 @@ import { AllocationService } from '../../services/allocation';
 import { ScanService } from '../../services/scan';
 import { BookCopy } from '../../models/book-copy.model';
 import { Allocation } from '../../models/allocation.model';
-import { ScanResponse, parseScanArray } from '../../models/scan.model';
+import { ReturnComparisonResponse } from '../../models/scan.model';
 
 @Component({
   selector: 'app-book-return',
@@ -18,7 +18,7 @@ export class BookReturnComponent {
   steps: StepConfig[] = [
     { label: 'Scan Book' },
     { label: 'Capture Condition' },
-    { label: 'AI Analysis' }
+    { label: 'AI Comparison' }
   ];
   currentStep = 0;
 
@@ -33,14 +33,17 @@ export class BookReturnComponent {
   conditionImage: File | null = null;
 
   // Step 3
-  scanResult: ScanResponse | null = null;
+  comparisonResult: ReturnComparisonResponse | null = null;
   isAnalyzing = false;
+  analysisError: string | null = null;
 
   constructor(
     private readonly bookCopyService: BookCopyService,
     private readonly allocationService: AllocationService,
     private readonly scanService: ScanService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly zone: NgZone,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   // Step 1: Scan/Enter QR
@@ -51,26 +54,36 @@ export class BookReturnComponent {
 
     this.bookCopyService.getByQrCode(this.qrCodeInput.trim()).subscribe({
       next: (copy) => {
-        this.bookCopy = copy;
-        // Find active allocation for this book copy
-        this.allocationService.getAll({ book_copy_id: copy.id, status: 'active' }).subscribe({
-          next: (res) => {
-            if (res.items.length > 0) {
-              this.activeAllocation = res.items[0];
-            } else {
-              this.bookCopyError = 'No active allocation found for this book copy';
+        this.zone.run(() => {
+          this.bookCopy = copy;
+          this.allocationService.getAll({ book_copy_id: copy.id, status: 'active' }).subscribe({
+            next: (res) => {
+              this.zone.run(() => {
+                if (res.items.length > 0) {
+                  this.activeAllocation = res.items[0];
+                } else {
+                  this.bookCopyError = 'No active allocation found for this book copy';
+                }
+                this.isLoading = false;
+                this.cdr.detectChanges();
+              });
+            },
+            error: () => {
+              this.zone.run(() => {
+                this.bookCopyError = 'Error checking allocation status';
+                this.isLoading = false;
+                this.cdr.detectChanges();
+              });
             }
-            this.isLoading = false;
-          },
-          error: () => {
-            this.bookCopyError = 'Error checking allocation status';
-            this.isLoading = false;
-          }
+          });
         });
       },
       error: (err) => {
-        this.bookCopyError = err.status === 404 ? 'Book copy not found' : 'Error looking up book';
-        this.isLoading = false;
+        this.zone.run(() => {
+          this.bookCopyError = err.status === 404 ? 'Book copy not found' : 'Error looking up book';
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        });
       }
     });
   }
@@ -87,24 +100,32 @@ export class BookReturnComponent {
   }
 
   onStep2Next(): void {
-    if (this.conditionImage && this.bookCopy) {
+    if (this.conditionImage && this.activeAllocation) {
       this.currentStep = 2;
-      this.runAnalysis();
+      this.runComparison();
     }
   }
 
-  // Step 3: AI Analysis
-  runAnalysis(): void {
-    if (!this.bookCopy || !this.conditionImage) return;
+  // Step 3: AI Comparison using POST /scans/return-comparison
+  runComparison(): void {
+    if (!this.activeAllocation || !this.conditionImage) return;
     this.isAnalyzing = true;
+    this.analysisError = null;
 
-    this.scanService.createScan(this.bookCopy.id, this.conditionImage).subscribe({
+    this.scanService.returnComparison(this.activeAllocation.id, this.conditionImage).subscribe({
       next: (result) => {
-        this.scanResult = result;
-        this.isAnalyzing = false;
+        this.zone.run(() => {
+          this.comparisonResult = result;
+          this.isAnalyzing = false;
+          this.cdr.detectChanges();
+        });
       },
       error: () => {
-        this.isAnalyzing = false;
+        this.zone.run(() => {
+          this.isAnalyzing = false;
+          this.analysisError = 'AI comparison failed. Please try again.';
+          this.cdr.detectChanges();
+        });
       }
     });
   }
@@ -116,21 +137,24 @@ export class BookReturnComponent {
 
     this.allocationService.returnBook(this.activeAllocation.id).subscribe({
       next: () => {
-        // Update book condition based on scan
-        if (this.bookCopy && this.scanResult) {
-          this.bookCopyService.updateCondition(this.bookCopy.id, this.scanResult.condition as any).subscribe();
-        }
-        this.isLoading = false;
-        this.router.navigate(['/app/books/return/confirm'], {
-          queryParams: {
-            book: this.bookCopy?.qr_code,
-            condition: this.scanResult?.condition,
-            previousCondition: this.bookCopy?.condition
-          }
+        this.zone.run(() => {
+          this.isLoading = false;
+          this.router.navigate(['/app/books/return/confirm'], {
+            queryParams: {
+              book: this.bookCopy?.qr_code,
+              condition: this.comparisonResult?.condition_after,
+              previousCondition: this.comparisonResult?.condition_before,
+              damageDetected: this.comparisonResult?.damage_detected,
+              chargeLearner: this.comparisonResult?.charge_learner
+            }
+          });
         });
       },
       error: () => {
-        this.isLoading = false;
+        this.zone.run(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        });
       }
     });
   }
@@ -139,13 +163,5 @@ export class BookReturnComponent {
     if (this.currentStep > 0) {
       this.currentStep--;
     }
-  }
-
-  getAiIssues(): string[] {
-    return parseScanArray(this.scanResult?.ai_issues || null);
-  }
-
-  getAiSuggestions(): string[] {
-    return parseScanArray(this.scanResult?.ai_suggestions || null);
   }
 }

@@ -1,7 +1,7 @@
 <div class="return-wizard">
   <div class="wizard-header">
     <h2>Return Book</h2>
-    <p class="subtitle">Process a book return and assess its condition</p>
+    <p class="subtitle">Process a book return with AI condition comparison</p>
   </div>
 
   <app-stepper [steps]="steps" [currentStep]="currentStep"></app-stepper>
@@ -17,13 +17,18 @@
         <div class="input-with-button">
           <input type="text" id="qrcode" [(ngModel)]="qrCodeInput" placeholder="Scan or type QR code..." class="form-input" (keyup.enter)="searchBookByQr()" />
           <button class="btn btn-primary btn-sm" (click)="searchBookByQr()" [disabled]="isLoading">
-            <i class="pi pi-search"></i>
+            <i class="pi" [class.pi-search]="!isLoading" [class.pi-spin]="isLoading" [class.pi-spinner]="isLoading"></i>
           </button>
         </div>
       </div>
 
+      <div *ngIf="isLoading && !bookCopy" class="loading-inline">
+        <i class="pi pi-spin pi-spinner"></i> Looking up book...
+      </div>
+
       <div *ngIf="bookCopyError" class="error-message">
         <i class="pi pi-exclamation-circle"></i> {{ bookCopyError }}
+        <button type="button" class="btn-retry" (click)="searchBookByQr()">Retry</button>
       </div>
 
       <div *ngIf="bookCopy && activeAllocation" class="book-found-card">
@@ -52,7 +57,7 @@
   <div class="step-content" *ngIf="currentStep === 1">
     <div class="form-card">
       <h3>Capture Return Condition</h3>
-      <p class="step-description">Upload a photo of the book's current condition for AI assessment</p>
+      <p class="step-description">Upload a photo of the book's current condition for AI comparison</p>
 
       <app-file-upload
         label="Upload book condition photo"
@@ -66,65 +71,94 @@
           <i class="pi pi-arrow-left"></i> Back
         </button>
         <button class="btn btn-primary" [disabled]="!conditionImage" (click)="onStep2Next()">
-          Analyze <i class="pi pi-bolt"></i>
+          Compare <i class="pi pi-bolt"></i>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Step 3: AI Analysis & Confirm -->
+  <!-- Step 3: AI Comparison Result -->
   <div class="step-content" *ngIf="currentStep === 2">
     <div class="form-card">
-      <h3>Condition Analysis & Return</h3>
+      <h3>AI Condition Comparison</h3>
 
       <div *ngIf="isAnalyzing" class="analyzing-state">
         <div class="spinner-large"></div>
-        <p>Analyzing book condition...</p>
+        <p>Comparing book condition...</p>
+        <p class="hint">AI is comparing the issue and return images</p>
       </div>
 
-      <div *ngIf="scanResult && !isAnalyzing" class="analysis-result">
+      <div *ngIf="analysisError && !isAnalyzing" class="empty-retry">
+        <i class="pi pi-exclamation-circle" style="font-size:1.5rem; color:#ef4444;"></i>
+        <p>{{ analysisError }}</p>
+        <button type="button" class="btn btn-secondary" (click)="runComparison()">
+          <i class="pi pi-refresh"></i> Retry
+        </button>
+      </div>
+
+      <div *ngIf="comparisonResult && !isAnalyzing" class="analysis-result">
+        <!-- Condition Before vs After -->
         <div class="condition-comparison">
           <div class="condition-box">
-            <span class="condition-label">Issue Condition</span>
-            <span class="badge badge-{{ bookCopy?.condition }}">{{ bookCopy?.condition }}</span>
+            <span class="condition-label">Before (Issue)</span>
+            <span class="badge badge-{{ comparisonResult.condition_before }}">{{ comparisonResult.condition_before }}</span>
+            <span class="quality-label">{{ comparisonResult.quality_score_before }}/100</span>
           </div>
           <i class="pi pi-arrow-right comparison-arrow"></i>
           <div class="condition-box">
-            <span class="condition-label">Return Condition</span>
-            <span class="badge badge-{{ scanResult.condition }}">{{ scanResult.condition }}</span>
+            <span class="condition-label">After (Return)</span>
+            <span class="badge badge-{{ comparisonResult.condition_after }}">{{ comparisonResult.condition_after }}</span>
+            <span class="quality-label">{{ comparisonResult.quality_score_after }}/100</span>
           </div>
         </div>
 
-        <div class="result-details">
-          <div class="detail-row">
-            <span class="label">AI Confidence:</span>
-            <span>{{ (scanResult.confidence_score * 100).toFixed(1) }}%</span>
+        <!-- Status flags -->
+        <div class="status-flags">
+          <div class="flag" [class.flag-danger]="comparisonResult.condition_changed" [class.flag-ok]="!comparisonResult.condition_changed">
+            <i class="pi" [class.pi-exclamation-triangle]="comparisonResult.condition_changed" [class.pi-check-circle]="!comparisonResult.condition_changed"></i>
+            {{ comparisonResult.condition_changed ? 'Condition Changed' : 'Condition Unchanged' }}
           </div>
-          <div class="detail-row">
-            <span class="label">Quality Score:</span>
-            <span>{{ scanResult.ai_quality_score || 'N/A' }}/100</span>
+          <div class="flag" [class.flag-danger]="comparisonResult.damage_detected" [class.flag-ok]="!comparisonResult.damage_detected">
+            <i class="pi" [class.pi-exclamation-triangle]="comparisonResult.damage_detected" [class.pi-check-circle]="!comparisonResult.damage_detected"></i>
+            {{ comparisonResult.damage_detected ? 'Damage Detected' : 'No New Damage' }}
+          </div>
+          <div class="flag" [class.flag-danger]="comparisonResult.charge_learner" [class.flag-ok]="!comparisonResult.charge_learner">
+            <i class="pi" [class.pi-wallet]="comparisonResult.charge_learner" [class.pi-check-circle]="!comparisonResult.charge_learner"></i>
+            {{ comparisonResult.charge_learner ? 'Charge Learner Recommended' : 'No Charge' }}
           </div>
         </div>
 
-        <!-- AI Issues -->
-        <div class="ai-section" *ngIf="getAiIssues().length > 0">
-          <h4><i class="pi pi-exclamation-triangle"></i> Issues Found</h4>
+        <!-- Summary -->
+        <div class="comparison-summary">
+          <p>{{ comparisonResult.comparison_summary }}</p>
+        </div>
+
+        <!-- New Issues -->
+        <div class="ai-section" *ngIf="comparisonResult.new_issues.length > 0">
+          <h4><i class="pi pi-exclamation-triangle"></i> New Issues Detected</h4>
           <ul class="ai-list issues-list">
-            <li *ngFor="let issue of getAiIssues()">{{ issue }}</li>
+            <li *ngFor="let issue of comparisonResult.new_issues">{{ issue }}</li>
           </ul>
         </div>
 
-        <!-- AI Suggestions -->
-        <div class="ai-section" *ngIf="getAiSuggestions().length > 0">
+        <!-- Suggestions -->
+        <div class="ai-section" *ngIf="comparisonResult.suggestions.length > 0">
           <h4><i class="pi pi-lightbulb"></i> Suggestions</h4>
           <ul class="ai-list suggestions-list">
-            <li *ngFor="let suggestion of getAiSuggestions()">{{ suggestion }}</li>
+            <li *ngFor="let suggestion of comparisonResult.suggestions">{{ suggestion }}</li>
           </ul>
         </div>
 
-        <!-- Scan Image -->
-        <div class="scan-image-preview" *ngIf="scanResult.scan_image_path">
-          <img [src]="scanResult.scan_image_path" alt="Scan image" />
+        <!-- Images comparison -->
+        <div class="images-comparison" *ngIf="comparisonResult.allocation_image_url || comparisonResult.return_image_url">
+          <div class="image-box" *ngIf="comparisonResult.allocation_image_url">
+            <span class="image-label">Issue Image</span>
+            <img [src]="comparisonResult.allocation_image_url" alt="Issue condition" />
+          </div>
+          <div class="image-box" *ngIf="comparisonResult.return_image_url">
+            <span class="image-label">Return Image</span>
+            <img [src]="comparisonResult.return_image_url" alt="Return condition" />
+          </div>
         </div>
 
         <div class="step-actions">
@@ -132,7 +166,8 @@
             <i class="pi pi-arrow-left"></i> Back
           </button>
           <button class="btn btn-primary" (click)="returnBook()" [disabled]="isLoading">
-            <i class="pi pi-check"></i> Confirm Return
+            <i class="pi" [class.pi-check]="!isLoading" [class.pi-spin]="isLoading" [class.pi-spinner]="isLoading"></i>
+            {{ isLoading ? 'Processing...' : 'Confirm Return' }}
           </button>
         </div>
       </div>
